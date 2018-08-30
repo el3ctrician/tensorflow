@@ -33,29 +33,39 @@ limitations under the License.
 namespace tensorflow {
 
   Status XlaACAPass::Run(const GraphOptimizationPassOptions& options) {
-    //Graph* graph = options.graph->get();
-
-    VLOG(0) << "ACA optimizer!";
-    VLOG(1) << "ACA optimizer!";
-    VLOG(2) << "ACA optimizer!";
-
-    /*for (Node* n : graph->op_nodes()) {
-      // In all cases, only try to compile computational nodes.
-      if (n->IsSend() || n->IsRecv() || n->IsControlFlow()) {
-        continue;
-      }
-
-      // Only compile nodes that are marked for compilation by the
-      // compilation-marking pass (via 'attr_name').
-      if (IsXlaCompiledKernel(*n)) {
-        TF_RETURN_IF_ERROR(ReplaceNodeWithXlaLaunch(graph, n));
-      }
+    VLOG(1) << "ACA_Project : -------------------------------START------------------------------------";
+    VLOG(1) << "ACA_Project : Start of our new compiler pass";
+    Graph* graph = options.graph->get();
+    VLOG(1) << "ACA_Project : loaded graph";
+    VLOG(1) << "ACA_Project : looping through all nodes";
+    // Loop through our graph nodes !.
+    for (Node* n : graph->op_nodes()) {
+      VLOG(1) << "ACA_Project : -------------------------Node Analysis---------------------------";
+      VLOG(1) << "ACA_Project : node op is : " << n->type_string();
+      //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
+      VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
+      //make a forloop to get all input nodes type, check if we have a bias node with a 2DConv as input to make the optimization
+      VLOG(1) << "ACA_Project : ------------------------End Node Analysis--------------------------";
     }
+    VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
 
-    if (VLOG_IS_ON(1)) {
-      dump_graph::DumpGraphToFile("build_xla_launch_ops", *graph,
-                                  options.flib_def);
-    }*/
-    return Status::OK();
+  //   for (Node* n : graph->op_nodes()) {
+  //     // In all cases, only try to compile computational nodes.
+  //     if (n->IsSend() || n->IsRecv() || n->IsControlFlow()) {
+  //       continue;
+  //     }
+
+  //     // Only compile nodes that are marked for compilation by the
+  //     // compilation-marking pass (via 'attr_name').
+  //     if (IsXlaCompiledKernel(*n)) {
+  //       TF_RETURN_IF_ERROR(ReplaceNodeWithXlaLaunch(graph, n));
+  //     }
+  //   }
+
+  //   if (VLOG_IS_ON(1)) {
+  //     dump_graph::DumpGraphToFile("build_xla_launch_ops", *graph,
+  //                                 options.flib_def);
+  //   }
+     return Status::OK();
   }
 }  // namespace tensorflow

@@ -281,11 +281,13 @@ cc_library(
 cc_library(
     name = "compilation_passes",
     srcs = [
+        "xla_aca_pass.cc",
         "build_xla_launch_ops_pass.cc",
         "encapsulate_subgraphs_pass.cc",
         "mark_for_compilation_pass.cc",
     ],
     hdrs = [
+        "xla_aca_pass.h",
         "build_xla_launch_ops_pass.h",
         "encapsulate_subgraphs_pass.h",
         "mark_for_compilation_pass.h",
