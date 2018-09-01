@@ -44,23 +44,42 @@ namespace tensorflow {
       VLOG(1) << "ACA_Project : node op is : " << n->type_string();
       //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
       VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
-      //make a forloop to get all input nodes type, check if we have a bias node with a 2DConv as input to make the optimization
+      //make a forloop to get all input nodes type, check if we have a BiasAdd node with a Conv2D as input to make the optimization
+      
+      //Find Convolutions
+      if(1){//n->name() == "BiasAdd"){
+        //VLOG(1) << "ACA_Project : ~~~~~~~~~~~~~~~~~~~~~~~~~Found a BiasAdd~~~~~~~~~~~~~~~~~~~~~~~~~ :";
+        VLOG(1) << "ACA_Project : -------------------------Node Input Edges Analysis---------------------------";
+        //NodeDef nodeDef = n->def();         //get the NodeDef from the current node
+        //EdgeSet inEdges = n->in_edges();    //get the set of input edges from the node 
+        //EdgeSet outEdges = n->out_edges();  //get the set of input edges from the node 
+
+        // Loop through the input edges
+        for (const Edge* edge : n->in_edges()) {
+          VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
+          //etc..
+        }
+
+        VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";
+      }
+      
       VLOG(1) << "ACA_Project : ------------------------End Node Analysis--------------------------";
     }
     VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
 
-  //   for (Node* n : graph->op_nodes()) {
-  //     // In all cases, only try to compile computational nodes.
-  //     if (n->IsSend() || n->IsRecv() || n->IsControlFlow()) {
-  //       continue;
-  //     }
 
-  //     // Only compile nodes that are marked for compilation by the
-  //     // compilation-marking pass (via 'attr_name').
-  //     if (IsXlaCompiledKernel(*n)) {
-  //       TF_RETURN_IF_ERROR(ReplaceNodeWithXlaLaunch(graph, n));
-  //     }
-  //   }
+    /*for (Node* n : graph->op_nodes()) {
+      // In all cases, only try to compile computational nodes.
+      if (n->IsSend() || n->IsRecv() || n->IsControlFlow()) {
+          continue;
+      }
+
+      // Only compile nodes that are marked for compilation by the
+      // compilation-marking pass (via 'attr_name').
+      if (IsXlaCompiledKernel(*n)) {
+        TF_RETURN_IF_ERROR(ReplaceNodeWithXlaLaunch(graph, n));
+      }
+    }*/
 
   //   if (VLOG_IS_ON(1)) {
   //     dump_graph::DumpGraphToFile("build_xla_launch_ops", *graph,
