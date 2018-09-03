@@ -97,7 +97,11 @@ cc_library(
 )
 tf_kernel_library(
     name = "xla_aca_ops",
-    src = ["xla_aca_ops.cc"]
+    srcs = ["xla_aca_ops.cc"],
+    deps = [
+        "//tensorflow/core:framework",
+        "//tensorflow/core:lib",
+    ]
 ) 
 tf_kernel_library(
     name = "strided_slice_op",
