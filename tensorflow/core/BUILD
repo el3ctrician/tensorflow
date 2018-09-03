@@ -942,6 +942,7 @@ cc_library(
     name = "all_kernels",
     visibility = ["//visibility:public"],
     deps = [
+        "//tensorflow/core/kernels:xla_aca_ops",
         "//tensorflow/core/kernels:array",
         "//tensorflow/core/kernels:audio",
         "//tensorflow/core/kernels:batch_kernels",
