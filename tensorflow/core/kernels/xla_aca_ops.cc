@@ -43,9 +43,9 @@ REGISTER_OP("LinearEq")
     });
 
 
-class FusedAcaAddMulOp : public OpKernel {
+class LinearEqOp : public OpKernel {
  public:
-  explicit FusedAcaAddMulOp(OpKernelConstruction* context) : OpKernel(context) {}
+  explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {}
 
   void Compute(OpKernelContext* context) override {
     // Grab the input tensor
@@ -69,7 +69,6 @@ class FusedAcaAddMulOp : public OpKernel {
     }
   }
 };
-//lunch the kernel on XLA device
-REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_XLA_CPU_JIT), FusedAcaAddMulOp);
+REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
 
 
