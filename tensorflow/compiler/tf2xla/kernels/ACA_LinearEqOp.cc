@@ -20,8 +20,8 @@ class LinearEqOp : public XlaOpKernel {
   void Compile(XlaOpKernelContext* ctx) override {
     if (!ctx->ValidateInputsAreSameShape(this)) return;
 
-    OP_REQUIRES(ctx, ctx->num_inputs() >= 1,
-                errors::InvalidArgument("AddN requires at least one argument"));
+    OP_REQUIRES(ctx, ctx->num_inputs() >= 3,
+                errors::InvalidArgument("LinearEq requires at least one argument"));
 
     xla::ComputationDataHandle sum = ctx->Input(0);
     for (int i = 1; i < ctx->num_inputs(); ++i) {
@@ -35,7 +35,7 @@ class LinearEqOp : public XlaOpKernel {
   TF_DISALLOW_COPY_AND_ASSIGN(LinearEqOp);
 };
 
-REGISTER_XLA_OP(Name("LinearEq"), LinearEqOp);
+REGISTER_XLA_OP(Name("LinearEq").CompilationOnly(), LinearEqOp);
 
 }  // namespace
 }  // namespace tensorflow

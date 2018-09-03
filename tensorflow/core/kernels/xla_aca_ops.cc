@@ -43,7 +43,7 @@ REGISTER_OP("LinearEq")
     });
 
 
-class FusedAcaAddMulOp : public XlaOpKernel {
+class FusedAcaAddMulOp : public OpKernel {
  public:
   explicit FusedAcaAddMulOp(OpKernelConstruction* context) : OpKernel(context) {}
 
