@@ -35,24 +35,22 @@ namespace tensorflow {
   Status XlaACAPass::Run(const GraphOptimizationPassOptions& options) {
     VLOG(1) << "ACA_Project : -------------------------------START------------------------------------";
     VLOG(1) << "ACA_Project : Start of our new compiler pass";
-    Graph* graph = options.graph->get();
+    Graph* graph_out = options.graph->get();
     VLOG(1) << "ACA_Project : loaded graph";
     VLOG(1) << "ACA_Project : looping through all nodes";
+
+
     // Loop through our graph nodes !.
-    for (Node* n : graph->op_nodes()) {
+    for (Node* n : graph_out->op_nodes()) {
       VLOG(1) << "ACA_Project : -------------------------Node Analysis---------------------------";
       VLOG(1) << "ACA_Project : node op is : " << n->type_string();
       //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
       VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
-      //make a forloop to get all input nodes type, check if we have a BiasAdd node with a Conv2D as input to make the optimization
       
-      //Find Convolutions
+      
+      //Find an Add Operation
       if(n->name() == "Add"){
-        //VLOG(1) << "ACA_Project : ~~~~~~~~~~~~~~~~~~~~~~~~~Found a BiasAdd~~~~~~~~~~~~~~~~~~~~~~~~~ :";
         VLOG(1) << "ACA_Project : -------------------------Node Input Edges Analysis---------------------------";
-        //NodeDef nodeDef = n->def();         //get the NodeDef from the current node
-        //EdgeSet inEdges = n->in_edges();    //get the set of input edges from the node 
-        //EdgeSet outEdges = n->out_edges();  //get the set of input edges from the node 
 
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
@@ -60,39 +58,45 @@ namespace tensorflow {
           if(edge->src()->type_string() == "MatMul"){
               VLOG(1) << "      ACA_Project : -------------------------Node Input Edge of an Edge Analysis---------------------------";
 
+              Edge* subedges[10];
+              int i=0;
               // Loop through the input edges of the edges
               for (const Edge* subedge : edge->src()->in_edges()){
                 VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string();
+                subedges[i++] = subedge;
               }
+
+
+              //Create a new operation that has 2 of the "MatMul" node inputs, the other 
+              //input of "Add" node and it's output
+              NodeDef node_def;
+              Status status;
+              //### bisogna settare l'operazione da qualche parte, forse con node_def!!
+              Node new_node = graph_out.AddNode(node_def, &status);
+              graph_out.AddEdge(edge.src(), subedges[0].dst_input(), new_node, 0);
+              graph_out.AddEdge(edge.src(), subedges[1].dst_input(), new_node, 1);
+
+              //Bisogna aggiungere il secondo input del nodo principale ancora
+
+              //remove node and edge after setted up the new node
+              graph_out.RemoveNode(n);
+              graph_out.RemoveEdge(edge);
+
               VLOG(1) << "      ACA_Project : -------------------------END Node Input Edge of an Edge Analysis---------------------------";
           }
         }
 
+
+
         VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";
       }
-      
       VLOG(1) << "ACA_Project : ------------------------End Node Analysis--------------------------";
     }
     VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
 
 
-    /*for (Node* n : graph->op_nodes()) {
-      // In all cases, only try to compile computational nodes.
-      if (n->IsSend() || n->IsRecv() || n->IsControlFlow()) {
-          continue;
-      }
-
-      // Only compile nodes that are marked for compilation by the
-      // compilation-marking pass (via 'attr_name').
-      if (IsXlaCompiledKernel(*n)) {
-        TF_RETURN_IF_ERROR(ReplaceNodeWithXlaLaunch(graph, n));
-      }
-    }*/
-
-  //   if (VLOG_IS_ON(1)) {
-  //     dump_graph::DumpGraphToFile("build_xla_launch_ops", *graph,
-  //                                 options.flib_def);
-  //   }
-     return Status::OK();
+      //update the graph
+      *options.graph = std::move(graph_out);
+      return Status::OK();
   }
 }  // namespace tensorflow
