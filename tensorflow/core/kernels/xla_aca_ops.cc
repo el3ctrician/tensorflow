@@ -3,7 +3,7 @@
  * Definition of a new OP that will the fusion of other two elementary ops
  * 
  * We are defining the fusion of "Add" and "Mul"
- * output = input1 + (input2 * input3)
+ * output = input1 + (input2 * input3) // can also be understood as linear eq Y = mX + b
  **/
 
 
@@ -33,10 +33,10 @@
 using namespace tensorflow;
 
 REGISTER_OP("LinearEq")
-    .Input("addVar: int32")
-    .Input("mulVar1: int32")
-    .Input("mulVar2: int32")
-    .Output("result: int32")
+    .Input("b: int32")
+    .Input("x : int32")
+    .Input("m : int32")
+    .Output("y: int32")
     .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
       c->set_output(0, c->input(0));
       return Status::OK();
