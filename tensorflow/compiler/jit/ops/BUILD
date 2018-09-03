@@ -16,4 +16,11 @@ cc_library(
     srcs = ["parallel_check_op.cc"],
     deps = ["//tensorflow/core:framework"],
     alwayslink = 1,
+<<<<<<< HEAD
+=======
+)
+cc_library(
+    name = "xla_aca_ops",
+    srcs = ["xla_aca_ops.cc"],
+>>>>>>> 2a69716dcb2c6ad8a5e70d84e8d8af1860b7c425
 )
