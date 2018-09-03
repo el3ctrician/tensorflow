@@ -10,6 +10,7 @@ load("//tensorflow:tensorflow.bzl", "tf_kernel_library")
 tf_kernel_library(
     name = "xla_ops",
     srcs = [
+        "ACA_LinearEqOp.cc",
         "aggregate_ops.cc",
         "arg_op.cc",
         "batch_matmul_op.cc",

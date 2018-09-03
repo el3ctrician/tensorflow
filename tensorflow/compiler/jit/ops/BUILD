@@ -17,8 +17,3 @@ cc_library(
     deps = ["//tensorflow/core:framework"],
     alwayslink = 1,
 )
-
-cc_library(
-    name = "xla_aca_ops",
-    srcs = ["xla_aca_ops.cc"],
-)
