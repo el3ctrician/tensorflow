@@ -62,12 +62,10 @@ namespace tensorflow {
 
               // Loop through the input edges of the edges
               for (const Edge* subedge : edge->src()->in_edges()){
-                VLOG(1) << "          ACA_Project : input node/edge op is : " << esubedge->src()->type_string();
+                VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string();
               }
               VLOG(1) << "      ACA_Project : -------------------------END Node Input Edge of an Edge Analysis---------------------------";
           }
-          
-          
         }
 
         VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";
