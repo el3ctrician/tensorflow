@@ -95,7 +95,10 @@ cc_library(
         "//third_party/eigen3",
     ],
 )
-
+tf_kernel_library(
+    name = "xla_aca_ops",
+    src = ["xla_aca_ops.cc"]
+) 
 tf_kernel_library(
     name = "strided_slice_op",
     srcs = [
