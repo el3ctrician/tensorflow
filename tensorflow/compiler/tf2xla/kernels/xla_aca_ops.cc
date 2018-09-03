@@ -37,7 +37,7 @@ class LinearEqOp : public XlaOpKernel {
   TF_DISALLOW_COPY_AND_ASSIGN(LinearEqOp);
 };
 
-REGISTER_XLA_OP(Name("LinearEq").AllowResourceTypes()(), LinearEqOp);
+REGISTER_XLA_OP(Name("LinearEq").AllowResourceTypes(), LinearEqOp);
 
 }  // namespace
 }  // namespace tensorflow
