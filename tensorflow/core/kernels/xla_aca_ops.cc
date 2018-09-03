@@ -58,8 +58,8 @@ class LinearEqOp : public OpKernel {
 
     // Create an output tensor
     Tensor* output_tensor = NULL;
-    OP_REQUIRES_OK(context, context->allocate_output(0, input_tensor.shape(),
-                                                     &output_tensor));
+    // OP_REQUIRES_OK(context, context->allocate_output(0, input_tensor.shape(),
+    //                                                  &output_tensor));
     auto output_flat = output_tensor->flat<int32>();
 
     // Set all but the first element of the output tensor to 0.
