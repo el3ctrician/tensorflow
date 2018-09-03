@@ -16,7 +16,7 @@ namespace {
 
 class LinearEqOp : public XlaOpKernel {
  public:
-  explicit LinearEqOp(OpKernelConstruction* ctx) {}
+  explicit LinearEqOp(OpKernelConstruction* ctx) : XlaOpKernel(ctx) {}
 
   void Compile(XlaOpKernelContext* ctx) override {
     //Function to be implemented 
