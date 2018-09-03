@@ -47,7 +47,7 @@ namespace tensorflow {
       //make a forloop to get all input nodes type, check if we have a BiasAdd node with a Conv2D as input to make the optimization
       
       //Find Convolutions
-      if(1){//n->name() == "BiasAdd"){
+      if(n->name() == "Add"){
         //VLOG(1) << "ACA_Project : ~~~~~~~~~~~~~~~~~~~~~~~~~Found a BiasAdd~~~~~~~~~~~~~~~~~~~~~~~~~ :";
         VLOG(1) << "ACA_Project : -------------------------Node Input Edges Analysis---------------------------";
         //NodeDef nodeDef = n->def();         //get the NodeDef from the current node
@@ -57,7 +57,13 @@ namespace tensorflow {
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
           VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
-          //etc..
+          if(edge->src()->type_string() == "MatMul"){
+              VLOG(1) << "      ACA_Project : -------------------------Node Input Edge of an Edge Analysis---------------------------";
+              VLOG(1) << "          ACA_Project : input node/edge op is : " << edge->src()->src()->type_string();
+              VLOG(1) << "      ACA_Project : -------------------------END Node Input Edge of an Edge Analysis---------------------------";
+          }
+          
+          
         }
 
         VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";

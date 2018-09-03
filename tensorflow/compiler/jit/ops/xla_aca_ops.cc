@@ -12,7 +12,7 @@
  * XLA code is slightly diffrent and Ops can be found in tensorflow/compiler/tf2xla/kernels
  * this is why this code will be moved there and ops will be implemented accordingly
  * Code is left here for reference 
- *  */
+ **/
 /** 
  * NB : add this to BUILD to build this file
  *                   |
