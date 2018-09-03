@@ -10,7 +10,6 @@ load("//tensorflow:tensorflow.bzl", "tf_kernel_library")
 tf_kernel_library(
     name = "xla_ops",
     srcs = [
-        "xla_aca_ops.cc",
         "aggregate_ops.cc",
         "arg_op.cc",
         "batch_matmul_op.cc",
@@ -171,7 +170,20 @@ tf_kernel_library(
         "//tensorflow/core:protos_all_cc",
     ],
 )
-
+tf_kernel_library(
+    name = "xla_aca_ops",
+    srcs = ["xla_aca_ops.cc"],
+    deps = [
+        "//tensorflow/compiler/tf2xla:common",
+        "//tensorflow/compiler/tf2xla:xla_compiler",
+        "//tensorflow/compiler/tf2xla/ops:functional_ops",
+        "//tensorflow/compiler/xla:literal_util",
+        "//tensorflow/compiler/xla/client:computation_builder",
+        "//tensorflow/core:framework",
+        "//tensorflow/core:lib",
+        "//tensorflow/core:protos_all_cc",
+    ],
+)
 # Kernels that only work on CPU, because they use XLA custom calls.
 # Only link this when using the CPU backend for XLA.
 tf_kernel_library(

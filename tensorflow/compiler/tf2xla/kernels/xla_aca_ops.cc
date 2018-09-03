@@ -6,7 +6,8 @@
  * output = input1 + (input2 * input3) //can also be interpeted as a linear equation Y = (m*X) + b
  **/
 
-
+#include "tensorflow/compiler/tf2xla/shape_util.h"
+#include "tensorflow/compiler/tf2xla/xla_context.h"
 #include "tensorflow/compiler/tf2xla/xla_op_kernel.h"
 #include "tensorflow/compiler/tf2xla/xla_op_registry.h"
 
@@ -15,27 +16,28 @@ namespace {
 
 class LinearEqOp : public XlaOpKernel {
  public:
-  explicit LinearEqOp(OpKernelConstruction* ctx) : XlaOpKernel(ctx) {}
+  explicit LinearEqOp(OpKernelConstruction* ctx) {}
 
   void Compile(XlaOpKernelContext* ctx) override {
-    if (!ctx->ValidateInputsAreSameShape(this)) return;
+    //Function to be implemented 
+    // if (!ctx->ValidateInputsAreSameShape(this)) return;
 
-    OP_REQUIRES(ctx, ctx->num_inputs() >= 3,
-                errors::InvalidArgument("LinearEq requires at least one argument"));
+    // OP_REQUIRES(ctx, ctx->num_inputs() >= 3,
+    //             errors::InvalidArgument("LinearEq requires at least one argument"));
 
-    xla::ComputationDataHandle sum = ctx->Input(0);
-    for (int i = 1; i < ctx->num_inputs(); ++i) {
-      sum = ctx->builder()->Add(sum, ctx->Input(i));
-    }
+    // xla::ComputationDataHandle sum = ctx->Input(0);
+    // for (int i = 1; i < ctx->num_inputs(); ++i) {
+    //   sum = ctx->builder()->Add(sum, ctx->Input(i));
+    // }
 
-    ctx->SetOutput(0, sum);
+    // ctx->SetOutput(0, sum);
   }
 
  private:
   TF_DISALLOW_COPY_AND_ASSIGN(LinearEqOp);
 };
 
-REGISTER_XLA_OP(Name("LinearEq").CompilationOnly(), LinearEqOp);
+REGISTER_XLA_OP(Name("LinearEq")..AllowResourceTypes()(), LinearEqOp);
 
 }  // namespace
 }  // namespace tensorflow
