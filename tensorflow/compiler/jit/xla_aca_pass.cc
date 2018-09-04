@@ -49,7 +49,7 @@ namespace tensorflow {
       
       NodeDef node_def;
       Status status;
-      Node new_node = graph_out->AddNode(node_def, &status);
+      Node* new_node = graph_out->AddNode(node_def, &status);
       
       //Find an Add Operation
       if(n->name() == "Add"){
