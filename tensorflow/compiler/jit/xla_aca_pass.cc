@@ -79,14 +79,14 @@ namespace tensorflow {
               //It would be a problem if more than one edge of Add where to be a MatMul operation
 
               //### bisogna settare l'operazione da qualche parte, forse con node_def!!
-              graph_out->AddEdge(edge.src()->in_edges()->src(), subedges[0].dst_input(), new_node, 0);
-              graph_out->AddEdge(edge.src()->in_edges()->src(), subedges[1].dst_input(), new_node, 1);
+              graph_out->AddEdge(edge->src()->in_edges()->src(), subedges[0]->dst_input(), new_node, 0);
+              graph_out->AddEdge(edge->src()->in_edges()->src(), subedges[1]->dst_input(), new_node, 1);
 
               VLOG(1) << "      ACA_Project : -------------------------END Node Input Edge of an Edge Analysis---------------------------";
           }
 
           //Bisogna aggiungere il secondo input del nodo principale
-          graph_out->AddEdge(edge.src(), edges[1].dst_input(), new_node, 0);
+          graph_out->AddEdge(edge->src(), edges[1]->dst_input(), new_node, 0);
               
         }
 
