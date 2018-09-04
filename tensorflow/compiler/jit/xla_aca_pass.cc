@@ -47,46 +47,53 @@ namespace tensorflow {
       //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
       VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
       
+      NodeDef node_def;
+      Status status;
+      Node new_node;
       
       //Find an Add Operation
       if(n->name() == "Add"){
         VLOG(1) << "ACA_Project : -------------------------Node Input Edges Analysis---------------------------";
 
+        Edge* edges[10];
+        int i=0;
+
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
           VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
+          edges[i++] = edge; //store all the edges of the Add operation
+
           if(edge->src()->type_string() == "MatMul"){
               VLOG(1) << "      ACA_Project : -------------------------Node Input Edge of an Edge Analysis---------------------------";
 
-              Edge* subedges[10];
-              int i=0;
+              Edge* subedges[10]; //store all subedges of the edges of the Add operation
+              int j=0;
               // Loop through the input edges of the edges
               for (const Edge* subedge : edge->src()->in_edges()){
                 VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string();
-                subedges[i++] = subedge;
+                subedges[j++] = subedge;
               }
-
 
               //Create a new operation that has 2 of the "MatMul" node inputs, the other 
               //input of "Add" node and it's output
-              NodeDef node_def;
-              Status status;
+              //It would be a problem if more than one edge of Add where to be a MatMul operation
+
               //### bisogna settare l'operazione da qualche parte, forse con node_def!!
-              Node new_node = graph_out.AddNode(node_def, &status);
-              graph_out.AddEdge(edge.src(), subedges[0].dst_input(), new_node, 0);
-              graph_out.AddEdge(edge.src(), subedges[1].dst_input(), new_node, 1);
-
-              //Bisogna aggiungere il secondo input del nodo principale ancora
-
-              //remove node and edge after setted up the new node
-              graph_out.RemoveNode(n);
-              graph_out.RemoveEdge(edge);
+              new_node = graph_out.AddNode(node_def, &status);
+              graph_out.AddEdge(edge.src()->in_edges()->src(), subedges[0].dst_input(), new_node, 0);
+              graph_out.AddEdge(edge.src()->in_edges()->src(), subedges[1].dst_input(), new_node, 1);
 
               VLOG(1) << "      ACA_Project : -------------------------END Node Input Edge of an Edge Analysis---------------------------";
           }
+
+          //Bisogna aggiungere il secondo input del nodo principale
+          graph_out.AddEdge(edge.src(), edges[1].dst_input(), new_node, 0);
+              
         }
 
-
+        //remove node and edge after setted up the new node
+        graph_out.RemoveNode(n);
+        graph_out.RemoveEdge(edges[0]);
 
         VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";
       }
