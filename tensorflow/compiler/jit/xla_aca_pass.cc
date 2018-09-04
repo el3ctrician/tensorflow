@@ -130,7 +130,7 @@ namespace tensorflow {
       }
       VLOG(1) << "ACA_Project : +++++++++++++End Node Analysis+++++++++++++";
     }
-    VLOG(1) << "ACA_Project : ++++++++++++++++END++++++++++++++++++++++++++;
+    VLOG(1) << "ACA_Project : ++++++++++++++++END++++++++++++++++++++++++++";
 
 
       //update the graph
