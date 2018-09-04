@@ -101,6 +101,37 @@ namespace tensorflow {
     }
     VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
 
+    //Print again everything so that we can verify
+    VLOG(1) << "ACA_Project : ################# NEW GRAPH #################";
+    // Loop through our graph nodes !.
+    for (Node* n : graph_out->op_nodes()) {
+      VLOG(1) << "ACA_Project : +++++++++++++Node Analysis+++++++++++++";
+      VLOG(1) << "ACA_Project : node op is : " << n->type_string();
+      VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
+ 
+      //Find an Add Operation
+      if(n->name() == "Add"){
+        VLOG(1) << "ACA_Project : +++++++++++++Node Input Edges Analysis+++++++++++++";
+
+        // Loop through the input edges
+        for (const Edge* edge : n->in_edges()) {
+          VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
+
+          if(edge->src()->type_string() == "MatMul"){
+              VLOG(1) << "      ACA_Project : +++++++++++++Node Input Edge of an Edge Analysis+++++++++++++";
+              // Loop through the input edges of the edges
+              for (const Edge* subedge : edge->src()->in_edges()){
+                VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string();
+              }
+              VLOG(1) << "      ACA_Project : +++++++++++++END Node Input Edge of an Edge Analysis+++++++++++++";
+          } 
+        }
+        VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
+      }
+      VLOG(1) << "ACA_Project : +++++++++++++End Node Analysis+++++++++++++";
+    }
+    VLOG(1) << "ACA_Project : ++++++++++++++++END++++++++++++++++++++++++++;
+
 
       //update the graph
       *options.graph = std::move(graph_out);
