@@ -133,7 +133,7 @@ namespace tensorflow {
 
 
       //update the graph
-      *options.graph = std::move(graph_out);
+      //*options.graph = std::move(graph_out);
       return Status::OK();
   }
 }  // namespace tensorflow
