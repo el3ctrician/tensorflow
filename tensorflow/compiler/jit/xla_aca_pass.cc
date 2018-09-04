@@ -55,7 +55,7 @@ namespace tensorflow {
       if(n->name() == "Add"){
         VLOG(1) << "ACA_Project : -------------------------Node Input Edges Analysis---------------------------";
 
-        Edge* edges[10];
+        const Edge* edges[10];
         int i=0;
 
         // Loop through the input edges
@@ -66,7 +66,7 @@ namespace tensorflow {
           if(edge->src()->type_string() == "MatMul"){
               VLOG(1) << "      ACA_Project : -------------------------Node Input Edge of an Edge Analysis---------------------------";
 
-              Edge* subedges[10]; //store all subedges of the edges of the Add operation
+              const Edge* subedges[10]; //store all subedges of the edges of the Add operation
               int j=0;
               // Loop through the input edges of the edges
               for (const Edge* subedge : edge->src()->in_edges()){
