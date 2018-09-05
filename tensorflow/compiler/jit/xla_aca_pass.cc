@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
-
+#include <string>
 #include "tensorflow/compiler/jit/xla_aca_pass.h"
 #include "tensorflow/compiler/jit/defs.h"
 #include "tensorflow/compiler/jit/encapsulate_subgraphs_pass.h"
