@@ -61,17 +61,20 @@ namespace tensorflow {
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
           VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
-          edges[i++] = edge; //store all the edges of the Add operation
+          //edges[i++] = edge; //store all the edges of the Add operation
 
           if(edge->src()->type_string() == "MatMul"){
               VLOG(1) << "      ACA_Project : -------------------------Node Input Edge of an Edge Analysis---------------------------";
 
-              const Edge* subedges[10]; //store all subedges of the edges of the Add operation
-              int j=0;
+              //const Edge* subedges[10]; //store all subedges of the edges of the Add operation
+              //int j=0;
               // Loop through the input edges of the edges
               for (const Edge* subedge : edge->src()->in_edges()){
                 VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string();
-                subedges[j++] = subedge;
+                //subedges[j++] = subedge;
+
+                //Connect the inputs of the MatMul operation to the new operation
+                graph_out->AddEdge(subedge->src(), subedge->dst_input(), new_node, i++);
               }
 
               //Create a new operation that has 2 of the "MatMul" node inputs, the other 
@@ -79,14 +82,15 @@ namespace tensorflow {
               //It would be a problem if more than one edge of Add where to be a MatMul operation
 
               //### bisogna settare l'operazione da qualche parte, forse con node_def!!
-              graph_out->AddEdge(subedges[0]->src(), subedges[0]->dst_input(), new_node, 0);
-              graph_out->AddEdge(subedges[1]->src(), subedges[1]->dst_input(), new_node, 1);
+              //graph_out->AddEdge(subedges[0]->src(), subedges[0]->dst_input(), new_node, 0);
+              //graph_out->AddEdge(subedges[1]->src(), subedges[1]->dst_input(), new_node, 1);
 
               VLOG(1) << "      ACA_Project : -------------------------END Node Input Edge of an Edge Analysis---------------------------";
           }
-
-          //Bisogna aggiungere il secondo input del nodo principale
-          graph_out->AddEdge(edge->src(), edges[1]->dst_input(), new_node, 3);
+          else{
+              //Bisogna aggiungere il secondo input del nodo principale
+              graph_out->AddEdge(edge->src(), edge->dst_input(), new_node, i++);
+          }
               
         }
 
