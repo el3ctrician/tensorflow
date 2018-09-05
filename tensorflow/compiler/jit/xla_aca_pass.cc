@@ -47,8 +47,11 @@ namespace tensorflow {
       //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
       VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
       
-      NodeDef node_def;
       Status status;
+      NodeDef node_def;
+      def.set_name(graph->NewName("LinearEqOp"));
+      def.set_op("LinearEq");
+      //AddNodeAttr( "LinearEq", 0, &node_def);
       Node* new_node = graph_out->AddNode(node_def, &status);
       string tmp = new_node->type_string();
       
