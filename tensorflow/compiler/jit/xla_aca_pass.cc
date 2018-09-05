@@ -39,6 +39,14 @@ namespace tensorflow {
     VLOG(1) << "ACA_Project : loaded graph";
     VLOG(1) << "ACA_Project : looping through all nodes";
 
+    //New node creation
+    Status status;
+    NodeDef node_def;
+    node_def.set_name(graph_out->NewName("LinearEqOp"));
+    node_def.set_op("LinearEq");
+    //AddNodeAttr( "LinearEq", 0, &node_def);
+    Node* new_node = graph_out->AddNode(node_def, &status);
+    string tmp = new_node->type_string();
 
     // Loop through our graph nodes !.
     for (Node* n : graph_out->op_nodes()) {
@@ -46,14 +54,6 @@ namespace tensorflow {
       VLOG(1) << "ACA_Project : node op is : " << n->type_string();
       //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
       VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
-      
-      Status status;
-      NodeDef node_def;
-      node_def.set_name(graph_out->NewName("LinearEqOp"));
-      node_def.set_op("LinearEq");
-      //AddNodeAttr( "LinearEq", 0, &node_def);
-      Node* new_node = graph_out->AddNode(node_def, &status);
-      string tmp = new_node->type_string();
       
       //Find an Add Operation
       if(n->name() == "Add"){
