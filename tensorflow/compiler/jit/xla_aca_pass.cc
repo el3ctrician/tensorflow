@@ -50,6 +50,7 @@ namespace tensorflow {
       NodeDef node_def;
       Status status;
       Node* new_node = graph_out->AddNode(node_def, &status);
+      string tmp = new_node->type_string();
       
       //Find an Add Operation
       if(n->name() == "Add"){
@@ -74,7 +75,6 @@ namespace tensorflow {
                 //subedges[j++] = subedge;
 
                 //Connect the inputs of the MatMul operation to the new operation
-                string tmp = new_node->type_string();
                 graph_out->AddEdge(subedge->src(), subedge->dst_input(), new_node, i++);
               }
 
