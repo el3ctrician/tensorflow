@@ -41,7 +41,7 @@ namespace tensorflow {
 
     const Edge* edges[10];
     const Edge* subedges[10]; //store all subedges of the edges of the Add operation
-    const Node* add_node;     //store the add node
+    Node* add_node;     //store the add node
 
     // Loop through our graph nodes !.
     for (Node* n : graph_out->op_nodes()) {
@@ -121,10 +121,9 @@ namespace tensorflow {
     //Bisogna aggiungere il secondo input del nodo principale
     graph_out->AddEdge(edges[1]->src(), edges[1]->dst_input(), new_node, 2);
 
-    //remove node and edge after setted up the new node
-                  
+    //remove node and edge after setted up the new node    
     graph_out->RemoveEdge(edges[0]);    //remove MatMul node
-    graph_out->RemoveNode(add_node);           //remove Add node
+    graph_out->RemoveNode(add_node);    //remove Add node
 
 
 
