@@ -156,6 +156,17 @@ namespace tensorflow {
         }
         VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
       }
+      //Find an LinearEq Operation
+      else if(n->name() == "LinearEq"){
+        VLOG(1) << "ACA_Project : +++++++++++++Node Input Edges Analysis+++++++++++++";
+
+        // Loop through the input edges
+        for (const Edge* edge : n->in_edges()) {
+          VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
+        }
+        VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
+      }
+
       VLOG(1) << "ACA_Project : +++++++++++++End Node Analysis+++++++++++++";
     }
     VLOG(1) << "ACA_Project : ++++++++++++++++END++++++++++++++++++++++++++";
