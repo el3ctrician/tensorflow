@@ -99,8 +99,8 @@ namespace tensorflow {
         }
 
         //remove node and edge after setted up the new node
-        graph_out->RemoveNode(n);
-        graph_out->RemoveEdge(edges[0]);
+   //     graph_out->RemoveNode(n);
+  //      graph_out->RemoveEdge(edges[0]);
 
         VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";
       }
