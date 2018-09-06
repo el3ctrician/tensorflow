@@ -20,17 +20,17 @@ class LinearEqOp : public XlaOpKernel {
 
   void Compile(XlaOpKernelContext* ctx) override {
     //Function to be implemented 
-    // if (!ctx->ValidateInputsAreSameShape(this)) return;
+    if (!ctx->ValidateInputsAreSameShape(this)) return;
 
-    // OP_REQUIRES(ctx, ctx->num_inputs() >= 3,
-    //             errors::InvalidArgument("LinearEq requires at least one argument"));
+    OP_REQUIRES(ctx, ctx->num_inputs() != 3,
+                errors::InvalidArgument("LinearEq requires exactly 3 arguments!"));
 
-    // xla::ComputationDataHandle sum = ctx->Input(0);
-    // for (int i = 1; i < ctx->num_inputs(); ++i) {
-    //   sum = ctx->builder()->Add(sum, ctx->Input(i));
-    // }
+    xla::ComputationDataHandle sum = ctx->Input(0);
+    sum = ctx->builder()->Mul(sum, ctx->Input(1));    //Multiplied input0 to input1: input0 * input1
+    sum = ctx->builder()->Add(sum, ctx->Input(2));    //Sumed input2 to the rest: input0 * input1 + input2
 
-    // ctx->SetOutput(0, sum);
+    //Set the output
+    ctx->SetOutput(0, sum);
   }
 
  private:
