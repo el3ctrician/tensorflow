@@ -39,14 +39,9 @@ namespace tensorflow {
     VLOG(1) << "ACA_Project : loaded graph";
     VLOG(1) << "ACA_Project : looping through all nodes";
 
-    //New node creation
-    Status status;
-    NodeDef node_def;
-    node_def.set_name(graph_out->NewName("LinearEqOp"));
-    node_def.set_op("LinearEq");
-    //AddNodeAttr( "LinearEq", 0, &node_def);
-    Node* new_node = graph_out->AddNode(node_def, &status);
-    string tmp = new_node->type_string();
+    const Edge* edges[10];
+    const Edge* subedges[10]; //store all subedges of the edges of the Add operation
+    const Edge* add_node;     //store the add node
 
     // Loop through our graph nodes !.
     for (Node* n : graph_out->op_nodes()) {
@@ -59,26 +54,25 @@ namespace tensorflow {
       if(n->name() == "Add"){
         VLOG(1) << "ACA_Project : -------------------------Node Input Edges Analysis---------------------------";
 
-        const Edge* edges[10];
         int i=0;
+        add_node = n; //store the add node
 
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
           VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
-          //edges[i++] = edge; //store all the edges of the Add operation
+          edges[i++] = edge; //store all the edges of the Add operation
 
           if(edge->src()->type_string() == "MatMul"){
               VLOG(1) << "      ACA_Project : -------------------------Node Input Edge of an Edge Analysis---------------------------";
 
-              //const Edge* subedges[10]; //store all subedges of the edges of the Add operation
-              //int j=0;
+              int j=0;
               // Loop through the input edges of the edges
               for (const Edge* subedge : edge->src()->in_edges()){
                 VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string();
-                //subedges[j++] = subedge;
+                subedges[j++] = subedge;
 
                 //Connect the inputs of the MatMul operation to the new operation
-                graph_out->AddEdge(subedge->src(), subedge->dst_input(), new_node, i++);
+                //graph_out->AddEdge(subedge->src(), subedge->dst_input(), new_node, i++);
               }
 
               //Create a new operation that has 2 of the "MatMul" node inputs, the other 
@@ -93,20 +87,46 @@ namespace tensorflow {
           }
           else{
               //Bisogna aggiungere il secondo input del nodo principale
-              graph_out->AddEdge(edge->src(), edge->dst_input(), new_node, i++);
+              //graph_out->AddEdge(edge->src(), edge->dst_input(), new_node, i++);
           }
               
         }
 
         //remove node and edge after setted up the new node
-   //     graph_out->RemoveNode(n);
-  //      graph_out->RemoveEdge(edges[0]);
+        //graph_out->RemoveNode(n);               
+        //graph_out->RemoveEdge(edges[0]);
 
         VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";
       }
       VLOG(1) << "ACA_Project : ------------------------End Node Analysis--------------------------";
     }
     VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
+
+
+
+    //New node creation
+    Status status;
+    NodeDef node_def;
+    //node_def.set_name(graph_out->NewName("LinearEqOp"));
+    node_def.set_op("LinearEq");
+    //AddNodeAttr( "LinearEq", 0, &node_def);
+    Node* new_node = graph_out->AddNode(node_def, &status);
+    string tmp = new_node->type_string();
+
+
+    //Modify the graph
+    //Connect the inputs of the MatMul operation to the new operation
+    graph_out->AddEdge(subedges[0]->src(), subedges[0]->dst_input(), new_node, 0);
+    graph_out->AddEdge(subedges[1]->src(), subedges[1]->dst_input(), new_node, 1);
+    //Bisogna aggiungere il secondo input del nodo principale
+    graph_out->AddEdge(edges[1]->src(), edges[1]->dst_input(), new_node, 2);
+
+    //remove node and edge after setted up the new node
+                  
+    graph_out->RemoveEdge(edges[0]);    //remove MatMul node
+    graph_out->RemoveNode(add_node);           //remove Add node
+
+
 
     //Print again everything so that we can verify
     VLOG(1) << "ACA_Project : ################# NEW GRAPH #################";
