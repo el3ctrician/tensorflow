@@ -35,8 +35,8 @@ REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 30,
                       EncapsulateSubgraphsPass);
 
 // Must run after EncapsulateSubgraphsPass.
-//REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 40,
-//                      BuildXlaLaunchOpsPass);
+REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 40,
+                      BuildXlaLaunchOpsPass);
 
 
 }  // namespace tensorflow
