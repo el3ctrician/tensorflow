@@ -58,6 +58,10 @@ namespace tensorflow {
         int i=0;
         add_node = n; //store the add node
 
+        // Loop through the output edges
+        for (const Edge* edge : add_node->out_edges()) {
+          VLOG(1) << "    +ACA_Project : output node/edge op is : " << edge->src()->type_string(); 
+        }
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
           VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
@@ -92,10 +96,6 @@ namespace tensorflow {
               //graph_out->AddEdge(edge->src(), edge->dst_input(), new_node, i++);
           }
               
-        }
-        // Loop through the output edges
-        for (const Edge* edge : n->out_edges()) {
-          VLOG(1) << "    +ACA_Project : output node/edge op is : " << edge->src()->type_string(); 
         }
 
         //remove node and edge after setted up the new node
