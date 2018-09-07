@@ -58,19 +58,18 @@ class LinearEqOp : public OpKernel {
     auto input_mul2 = input_mul2_tensor.flat<int32>();
     auto input_add = input_add_tensor.flat<int32>();
 
-    // // Create an output tensor
-    // Tensor* output_tensor = NULL;
-    // OP_REQUIRES_OK(context, context->allocate_output(0, input_add_tensor.shape(), &output_tensor));
-    // auto output_flat = output_tensor->flat<int32>();
+    // Create an output tensor
+    Tensor* output_tensor = NULL;
+    OP_REQUIRES_OK(context, context->allocate_output(0, input_add_tensor.shape(), &output_tensor));
+    auto output_flat = output_tensor->flat<int32>();
 
-    // // Set all but the first element of the output tensor to 0.
-    // const int N = input_add.size();
-    // for (int i = 1; i < N; i++) {
-    //   output_flat(i) = input_add(i) + (input_mul1(i) * input_mul2(i));
-    // }
+    // Set all but the first element of the output tensor to 0.
+    const int N = input_add.size();
+    for (int i = 1; i < N; i++) {
+      output_flat(i) = input_add(i) + (input_mul1(i) * input_mul2(i));
+    }
 
     // //Set the output tensor
-    // const Tensor& toutput = context->output(0);
     // context->set_output(0, toutput);
   }
 };
