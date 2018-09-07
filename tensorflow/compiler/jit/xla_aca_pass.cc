@@ -117,7 +117,12 @@ namespace tensorflow {
       string tmp = new_node->type_string();
 
       //Bisogna aggiungere un edge che collega l'output del nuovo nuovo con il nodo che riceveva in ingresso Add
-      //graph_out->AddEdge(new_node, 0, add_node->out, 0);
+      Node* top_node;
+      for (Node* n : add_node->out_nodes()){
+          top_node = n; //take the first output
+          break;        //and leave
+      }
+      graph_out->AddEdge(new_node, 0, top_node, 0);
       //(Node* source, int x, Node* dest, int y) 
 
       //Modify the graph
