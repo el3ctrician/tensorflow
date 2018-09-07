@@ -113,7 +113,6 @@ namespace tensorflow {
       node_def.set_op("LinearEq");
       //AddNodeAttr( "LinearEq", 0, &node_def);
       Node* new_node = graph_out->AddNode(node_def, &status);
-      new_node->output
       string tmp = new_node->type_string();
 
       //Bisogna aggiungere un edge che collega l'output del nuovo nuovo con il nodo che riceveva in ingresso Add
