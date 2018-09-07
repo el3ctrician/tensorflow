@@ -157,7 +157,7 @@ namespace tensorflow {
         VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
       }
       //Find an LinearEq Operation
-      else if(n->name() == "LinearEq"){
+      else if(n->type_string() == "LinearEq"){
         VLOG(1) << "ACA_Project : +++++++++++++Node Input Edges Analysis+++++++++++++";
 
         // Loop through the input edges
