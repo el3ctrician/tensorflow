@@ -113,7 +113,7 @@ namespace tensorflow {
       //New node creation
       Status status;
       NodeDef node_def;// = add_node->def();
-      node_def.set_name("LinearEqOp");
+      node_def.set_name("_LinearEqOp_optimized_0_0");
       node_def.set_op("LinearEq");
       //AddNodeAttr( "LinearEq", 0, &node_def);
       Node* new_node = graph_out->AddNode(node_def, &status);
