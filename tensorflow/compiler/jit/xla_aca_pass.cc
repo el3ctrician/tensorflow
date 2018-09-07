@@ -93,6 +93,10 @@ namespace tensorflow {
           }
               
         }
+        // Loop through the output edges
+        for (const Edge* edge : n->out_edges()) {
+          VLOG(1) << "    +ACA_Project : output node/edge op is : " << edge->src()->type_string(); 
+        }
 
         //remove node and edge after setted up the new node
         //graph_out->RemoveNode(n);               
