@@ -112,7 +112,8 @@ namespace tensorflow {
       //node_def.set_name(graph_out->NewName("LinearEqOp"));
       node_def.set_op("LinearEq");
       //AddNodeAttr( "LinearEq", 0, &node_def);
-      Node* new_node = graph_out->AddNode(node_def, &status);
+      //Node* new_node = graph_out->AddNode(node_def, &status);
+      Node*new_node = add_node->AddNode(node_def, graph_out);
       string tmp = new_node->type_string();
 
 
