@@ -105,15 +105,14 @@ namespace tensorflow {
     VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
 
 
-    if(found_addmulops){
+/*    if(found_addmulops){
       //New node creation
       Status status;
       NodeDef node_def;
       //node_def.set_name(graph_out->NewName("LinearEqOp"));
       node_def.set_op("LinearEq");
       //AddNodeAttr( "LinearEq", 0, &node_def);
-      //Node* new_node = graph_out->AddNode(node_def, &status);
-      Node*new_node = add_node->AddNode(node_def, graph_out);
+      Node* new_node = graph_out->AddNode(node_def, &status);
       string tmp = new_node->type_string();
 
 
@@ -128,7 +127,7 @@ namespace tensorflow {
       graph_out->RemoveEdge(edges[0]);    //remove MatMul node
       graph_out->RemoveNode(add_node);    //remove Add node
     }
-
+*/
 
     //Print again everything so that we can verify
     VLOG(1) << "ACA_Project : ################# NEW GRAPH #################";
