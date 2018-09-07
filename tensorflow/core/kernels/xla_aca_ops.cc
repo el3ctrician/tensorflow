@@ -67,11 +67,12 @@ class LinearEqOp : public OpKernel {
     const int N = input_add.size();
     for (int i = 1; i < N; i++) {
       output_flat(i) = input_add(i) + (input_mul1(i) * input_mul2(i));
+      context->set_output(i, output_flat(i));
     }
 
     //Set the output tensor
-    const Tensor& toutput = context->output(0);
-    context->set_output(0, toutput);
+    //const Tensor& toutput = context->output(0);
+    //context->set_output(0, toutput);
   }
 };
 REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
