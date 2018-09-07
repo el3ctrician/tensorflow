@@ -70,7 +70,7 @@ class LinearEqOp : public OpKernel {
     }
 
     //Set the output tensor
-    ctx->set_output(0, output_tensor);
+    context->set_output(0, output_tensor);
   }
 };
 REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
