@@ -105,7 +105,7 @@ namespace tensorflow {
     VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
 
 
-/*    if(found_addmulops){
+    if(found_addmulops){
       //New node creation
       Status status;
       NodeDef node_def;
@@ -113,8 +113,12 @@ namespace tensorflow {
       node_def.set_op("LinearEq");
       //AddNodeAttr( "LinearEq", 0, &node_def);
       Node* new_node = graph_out->AddNode(node_def, &status);
+      new_node->output
       string tmp = new_node->type_string();
 
+      //Bisogna aggiungere un edge che collega l'output del nuovo nuovo con il nodo che riceveva in ingresso Add
+      //graph_out->AddEdge(new_node, 0, add_node->out, 0);
+      //(Node* source, int x, Node* dest, int y) 
 
       //Modify the graph
       //Connect the inputs of the MatMul operation to the new operation
@@ -127,7 +131,7 @@ namespace tensorflow {
       graph_out->RemoveEdge(edges[0]);    //remove MatMul node
       graph_out->RemoveNode(add_node);    //remove Add node
     }
-*/
+
 
     //Print again everything so that we can verify
     VLOG(1) << "ACA_Project : ################# NEW GRAPH #################";
