@@ -67,7 +67,6 @@ class LinearEqOp : public OpKernel {
     const int N = input_add.size();
     for (int i = 1; i < N; i++) {
       output_flat(i) = input_add(i) + (input_mul1(i) * input_mul2(i));
-      context->set_output(i, output_flat(i));
     }
 
     //Set the output tensor
