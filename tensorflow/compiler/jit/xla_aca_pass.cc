@@ -59,8 +59,8 @@ namespace tensorflow {
         add_node = n; //store the add node
 
         // Loop through the output edges
-        for (const Edge* edge : add_node->out_edges()) {
-          VLOG(1) << "    +ACA_Project : output node/edge op is : " << edge->src()->type_string(); 
+        for (const Node* node : add_node->out_nodes()) {
+          VLOG(1) << "    +ACA_Project : output node/edge op is : " << node->type_string(); 
         }
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
@@ -177,8 +177,8 @@ namespace tensorflow {
           VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
         }
         // Loop through the output edges
-        for (const Edge* edge : n->out_edges()) {
-          VLOG(1) << "    +ACA_Project : output node/edge op is : " << edge->src()->type_string(); 
+        for (const Node* node : n->out_nodes()) {
+          VLOG(1) << "    +ACA_Project : output node/edge op is : " << node->type_string(); 
         }
         VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
       }
