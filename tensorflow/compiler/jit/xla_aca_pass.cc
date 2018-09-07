@@ -148,6 +148,7 @@ namespace tensorflow {
       VLOG(1) << "ACA_Project : +++++++++++++Node Analysis+++++++++++++";
       VLOG(1) << "ACA_Project : node op is : " << n->type_string();
       VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
+      VLOG(1) << "ACA_Project : Node name : " << n->name();
  
       //Find an Add Operation
       if(n->name() == "Add"){
