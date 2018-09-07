@@ -51,17 +51,16 @@ class LinearEqOp : public OpKernel {
     VLOG(1) << "ACA_Project : LinearEqOp statrt in core/kernels";
 
     // Grab the input tensor
-    const Tensor& input_add_tensor = context->input(0);
-    const Tensor& input_mul1_tensor = context->input(1);
-    const Tensor& input_mul2_tensor = context->input(2);
-    auto input_add = input_add_tensor.flat<int32>();
+    const Tensor& input_mul1_tensor = context->input(0);
+    const Tensor& input_mul2_tensor = context->input(1);
+    const Tensor& input_add_tensor = context->input(2);
     auto input_mul1 = input_mul1_tensor.flat<int32>();
     auto input_mul2 = input_mul2_tensor.flat<int32>();
+    auto input_add = input_add_tensor.flat<int32>();
 
     // Create an output tensor
     Tensor* output_tensor = NULL;
-    // OP_REQUIRES_OK(context, context->allocate_output(0, input_tensor.shape(),
-    //                                                  &output_tensor));
+    OP_REQUIRES_OK(context, context->allocate_output(0, input_add_tensor.shape(), &output_tensor));
     auto output_flat = output_tensor->flat<int32>();
 
     // Set all but the first element of the output tensor to 0.
@@ -69,6 +68,9 @@ class LinearEqOp : public OpKernel {
     for (int i = 1; i < N; i++) {
       output_flat(i) = input_add(i) + (input_mul1(i) * input_mul2(i));
     }
+
+    //Set the output tensor
+    ctx->set_output(0, output_tensor);
   }
 };
 REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
