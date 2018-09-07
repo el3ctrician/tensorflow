@@ -112,7 +112,7 @@ namespace tensorflow {
     if(found_addmulops){
       //New node creation
       Status status;
-      NodeDef node_def;
+      NodeDef node_def = add_node->def();
       node_def.set_name("LinearEq-op");
       node_def.set_op("LinearEq");
       //AddNodeAttr( "LinearEq", 0, &node_def);
