@@ -20,23 +20,23 @@ limitations under the License.
 #include "tensorflow/core/common_runtime/optimization_registry.h"
 
 namespace tensorflow {
-
+// ACA Optimizzation Pass
 REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 10,
+                      XlaACAPass);
+
+REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 20,
                       MarkForCompilationPass);
 
 // The EncapsulateSubgraphs pass must run after the MarkForCompilationPass. We
 // also need to run it after the graph been rewritten to have _Send nodes added
 // for fetches. Before the _Send nodes are added, fetch nodes are identified by
 // name, and encapsulation might remove that node from the graph.
-REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 20,
+REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 30,
                       EncapsulateSubgraphsPass);
 
 // Must run after EncapsulateSubgraphsPass.
-REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 30,
+REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 40,
                       BuildXlaLaunchOpsPass);
 
-// ACA Optimizzation Pass
-REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 40,
-                      XlaACAPass);
 
 }  // namespace tensorflow
