@@ -49,6 +49,8 @@
 //   explicit FusedAcaAddMulOp(OpKernelConstruction* context) : OpKernel(context) {}
 
 //   void Compute(OpKernelContext* context) override {
+//     VLOG(1) << "ACA_Project : LinearEqOp statrt in jit/ops";
+
 //     // Grab the input tensor
 //     const Tensor& input_add1_tensor = context->input(0);
 //     const Tensor& input_add2_tensor = context->input(1);

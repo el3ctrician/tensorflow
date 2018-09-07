@@ -19,6 +19,8 @@ class LinearEqOp : public XlaOpKernel {
   explicit LinearEqOp(OpKernelConstruction* ctx) : XlaOpKernel(ctx) {}
 
   void Compile(XlaOpKernelContext* ctx) override {
+    VLOG(1) << "ACA_Project : LinearEqOp statrt in tf2xla/kernels";
+
     //Function to be implemented 
     if (!ctx->ValidateInputsAreSameShape(this)) return;
 

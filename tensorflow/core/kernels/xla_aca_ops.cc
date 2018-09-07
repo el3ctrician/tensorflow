@@ -48,6 +48,8 @@ class LinearEqOp : public OpKernel {
   explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {}
 
   void Compute(OpKernelContext* context) override {
+    VLOG(1) << "ACA_Project : LinearEqOp statrt in core/kernels";
+
     // Grab the input tensor
     const Tensor& input_add_tensor = context->input(0);
     const Tensor& input_mul1_tensor = context->input(1);
