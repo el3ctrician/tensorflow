@@ -176,6 +176,10 @@ namespace tensorflow {
         for (const Edge* edge : n->in_edges()) {
           VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
         }
+        // Loop through the output edges
+        for (const Edge* edge : n->out_edges()) {
+          VLOG(1) << "    +ACA_Project : output node/edge op is : " << edge->src()->type_string(); 
+        }
         VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
       }
 
