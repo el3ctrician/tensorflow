@@ -43,7 +43,7 @@ namespace tensorflow {
     const Edge* subedges[10]; //store all subedges of the edges of the Add operation
     Node* add_node;     //store the add node
     bool found_addmulops = false;
-
+    
     // Loop through our graph nodes !.
     for (Node* n : graph_out->op_nodes()) {
       VLOG(1) << "ACA_Project : -------------------------Node Analysis---------------------------";
