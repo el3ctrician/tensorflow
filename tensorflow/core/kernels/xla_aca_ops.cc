@@ -64,13 +64,20 @@ class LinearEqOp : public OpKernel {
     auto output_flat = output_tensor->flat<int32>();
 
     // Set all but the first element of the output tensor to 0.
-    const int N = input_add.size();
+    output_tensor = input_mul1_tensor;
+    output_tensor = context->builder()->Mul(output_tensor, input_mul2_tensor);
+    output_tensor = context->builder()->Add(output_tensor, input_add_tensor);
+
+    //Set the output
+    context->SetOutput(0, output_tensor);
+
+    /*const int N = input_add.size();
     for (int i = 1; i < N; i++) {
       output_flat(i) = input_add(i) + (input_mul1(i) * input_mul2(i));
-    }
+    }*/
 
     // //Set the output tensor
-    context->set_output(0, output_tensor);
+    //context->set_output(0, output_tensor);
   }
 };
 REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
