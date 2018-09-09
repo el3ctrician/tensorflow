@@ -64,7 +64,7 @@ class LinearEqOp : public OpKernel {
     auto output_flat = output_tensor->flat<int32>();
 
     // Set all but the first element of the output tensor to 0.
-    output_tensor = &input_mul1_tensor;
+    output_tensor = context->builder()->Add(output_tensor, input_mul1_tensor);
     output_tensor = context->builder()->Mul(output_tensor, input_mul2_tensor);
     output_tensor = context->builder()->Add(output_tensor, input_add_tensor);
 
