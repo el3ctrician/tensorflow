@@ -59,7 +59,7 @@ class LinearEqOp : public OpKernel {
     auto input_add = input_add_tensor.flat<int32>();
 
     // Create an output tensor
-    Tensor* output_tensor = NULL;
+    Tensor& output_tensor = NULL;
     OP_REQUIRES_OK(context, context->allocate_output(0, input_add_tensor.shape(), &output_tensor));
     auto output_flat = output_tensor->flat<int32>();
 
