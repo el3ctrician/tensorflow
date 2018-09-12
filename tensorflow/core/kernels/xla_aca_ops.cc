@@ -77,6 +77,7 @@ class LinearEqOp : public OpKernel {
     context->set_output(0, *output_tensor);
   }
 };
-REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
+//REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
+REGISTER_KERNEL_BUILDER(Name("LinearEq"), LinearEqOp);
 
 
