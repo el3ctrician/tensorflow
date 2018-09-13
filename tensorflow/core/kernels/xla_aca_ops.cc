@@ -54,23 +54,48 @@ class LinearEqOp : public OpKernel {
     const Tensor& input_mul1_tensor = context->input(0);
     const Tensor& input_mul2_tensor = context->input(1);
     const Tensor& input_add_tensor = context->input(2);
-    const Tensor& output_tensor = context->output(0);
     auto input_mul1 = input_mul1_tensor.flat<int32>();
     auto input_mul2 = input_mul2_tensor.flat<int32>();
     auto input_add = input_add_tensor.flat<int32>();
 
-    // Create an output tensor
-    Tensor* output_tensor = NULL;
-    OP_REQUIRES_OK(context, context->allocate_output(0, output_tensor.shape(), &output_tensor));
-    auto output_flat = output_tensor->flat<int32>();
+    // Check that the dimensions of the three matrices are valid.
+    bool transpose_a_;
+    bool transpose_b_;
+    OP_REQUIRES_OK(ctx, ctx->GetAttr("transpose_a", &transpose_a_));
+    OP_REQUIRES_OK(ctx, ctx->GetAttr("transpose_b", &transpose_b_));
+    OP_REQUIRES(ctx, TensorShapeUtils::IsMatrix(input_mul1_tensor.shape()),
+                errors::InvalidArgument("In[0] is not a matrix"));
+    OP_REQUIRES(ctx, TensorShapeUtils::IsMatrix(input_mul2_tensor.shape()),
+                errors::InvalidArgument("In[1] is not a matrix"));
+    OP_REQUIRES(ctx, TensorShapeUtils::IsMatrix(input_add_tensor.shape()),
+                errors::InvalidArgument("In[2] is not a matrix"));
+    Eigen::array<Eigen::IndexPair<Eigen::DenseIndex>, 1> dim_pair;
+    dim_pair[0].first = transpose_a_ ? 0 : 1;
+    dim_pair[0].second = transpose_b_ ? 1 : 0;
 
+    // Create an output tensor
+    OP_REQUIRES(
+        ctx, input_mul1_tensor.dim_size(dim_pair[0].first) == input_mul2_tensor.dim_size(dim_pair[0].second),
+        errors::InvalidArgument(
+            "Matrix size-incompatible: In[0]: ", input_mul1_tensor.shape().DebugString(),
+            ", In[1]: ", input_mul2_tensor.shape().DebugString()));
+    int a_dim_remaining = 1 - dim_pair[0].first;
+    int b_dim_remaining = 1 - dim_pair[0].second;
+    TensorShape out_shape({input_mul1_tensor.dim_size(a_dim_remaining), input_mul2_tensor.dim_size(b_dim_remaining)});
+    Tensor* out = nullptr;
+
+    OP_REQUIRES_OK(context, context->allocate_output(0, out_shape, &out));
+    auto output_flat = out->flat<int32>();
+
+
+    //Do the operation
     const int N = input_add.size();
     for (int i = 1; i < N; i++) {
       output_flat(i) = input_add(i) + (input_mul1(i) * input_mul2(i));
     }
 
     //Set the output tensor
-    context->set_output(0, *output_tensor);
+    context->set_output(0, *out);
   }
 };
 REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
