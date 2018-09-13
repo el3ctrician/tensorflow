@@ -61,13 +61,13 @@ class LinearEqOp : public OpKernel {
     // Check that the dimensions of the three matrices are valid.
     bool transpose_a_;
     bool transpose_b_;
-    OP_REQUIRES_OK(ctx, ctx->GetAttr("transpose_a", &transpose_a_));
-    OP_REQUIRES_OK(ctx, ctx->GetAttr("transpose_b", &transpose_b_));
-    OP_REQUIRES(ctx, TensorShapeUtils::IsMatrix(input_mul1_tensor.shape()),
+    OP_REQUIRES_OK(context, context->GetAttr("transpose_a", &transpose_a_));
+    OP_REQUIRES_OK(context, context->GetAttr("transpose_b", &transpose_b_));
+    OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_mul1_tensor.shape()),
                 errors::InvalidArgument("In[0] is not a matrix"));
-    OP_REQUIRES(ctx, TensorShapeUtils::IsMatrix(input_mul2_tensor.shape()),
+    OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_mul2_tensor.shape()),
                 errors::InvalidArgument("In[1] is not a matrix"));
-    OP_REQUIRES(ctx, TensorShapeUtils::IsMatrix(input_add_tensor.shape()),
+    OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_add_tensor.shape()),
                 errors::InvalidArgument("In[2] is not a matrix"));
     Eigen::array<Eigen::IndexPair<Eigen::DenseIndex>, 1> dim_pair;
     dim_pair[0].first = transpose_a_ ? 0 : 1;
@@ -75,7 +75,7 @@ class LinearEqOp : public OpKernel {
 
     // Create an output tensor
     OP_REQUIRES(
-        ctx, input_mul1_tensor.dim_size(dim_pair[0].first) == input_mul2_tensor.dim_size(dim_pair[0].second),
+        context, input_mul1_tensor.dim_size(dim_pair[0].first) == input_mul2_tensor.dim_size(dim_pair[0].second),
         errors::InvalidArgument(
             "Matrix size-incompatible: In[0]: ", input_mul1_tensor.shape().DebugString(),
             ", In[1]: ", input_mul2_tensor.shape().DebugString()));
