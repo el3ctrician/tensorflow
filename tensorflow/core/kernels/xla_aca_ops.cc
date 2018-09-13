@@ -45,7 +45,10 @@ REGISTER_OP("LinearEq")
 
 class LinearEqOp : public OpKernel {
  public:
-  explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {}
+  explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {
+    OP_REQUIRES_OK(context, context->GetAttr("transpose_a", &transpose_a_));
+    OP_REQUIRES_OK(context, context->GetAttr("transpose_b", &transpose_b_));
+  }
 
   void Compute(OpKernelContext* context) override {
     VLOG(1) << "ACA_Project : LinearEqOp statrt in core/kernels";
@@ -59,10 +62,6 @@ class LinearEqOp : public OpKernel {
     auto input_add = input_add_tensor.flat<int32>();
 
     // Check that the dimensions of the three matrices are valid.
-    bool transpose_a_;
-    bool transpose_b_;
-    OP_REQUIRES_OK(context, context->GetAttr("transpose_a", &transpose_a_));
-    OP_REQUIRES_OK(context, context->GetAttr("transpose_b", &transpose_b_));
     OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_mul1_tensor.shape()),
                 errors::InvalidArgument("In[0] is not a matrix"));
     OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_mul2_tensor.shape()),
@@ -97,6 +96,10 @@ class LinearEqOp : public OpKernel {
     //Set the output tensor
     context->set_output(0, *out);
   }
+
+ private:
+  bool transpose_a_;
+  bool transpose_b_;
 };
 REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
 
