@@ -32,6 +32,7 @@
 
 using namespace tensorflow;
 
+/*
 REGISTER_OP("LinearEq")
     .Input("b: int32")
     .Input("x : int32")
@@ -40,7 +41,7 @@ REGISTER_OP("LinearEq")
     .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
       c->set_output(0, c->input(0));
       return Status::OK();
-    });
+    });*/
 
 
 class LinearEqOp : public OpKernel {
