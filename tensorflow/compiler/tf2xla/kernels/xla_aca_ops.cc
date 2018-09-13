@@ -20,7 +20,7 @@ REGISTER_OP("LinearEq")
   .Input("m : int32")
   .Output("y: int32")
   .SetIsStateful()
-  .SetShapeFn(shape_inference::UnknownShape)
+  .SetShapeFn(shape_inference::UnknownShape);
 
 class LinearEqOp : public XlaOpKernel {
  public:
