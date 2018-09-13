@@ -54,19 +54,15 @@ class LinearEqOp : public OpKernel {
     const Tensor& input_mul1_tensor = context->input(0);
     const Tensor& input_mul2_tensor = context->input(1);
     const Tensor& input_add_tensor = context->input(2);
+    const Tensor& output_tensor = context->output(0);
     auto input_mul1 = input_mul1_tensor.flat<int32>();
     auto input_mul2 = input_mul2_tensor.flat<int32>();
     auto input_add = input_add_tensor.flat<int32>();
 
     // Create an output tensor
     Tensor* output_tensor = NULL;
-    OP_REQUIRES_OK(context, context->allocate_output(0, input_add_tensor.shape(), &output_tensor));
+    OP_REQUIRES_OK(context, context->allocate_output(0, output_tensor.shape(), &output_tensor));
     auto output_flat = output_tensor->flat<int32>();
-
-    // Set all but the first element of the output tensor to 0.
-    /*output_tensor = context->Add(output_tensor, input_mul1_tensor);
-    output_tensor = context->Mul(output_tensor, input_mul2_tensor);
-    output_tensor = context->Add(output_tensor, input_add_tensor);*/
 
     const int N = input_add.size();
     for (int i = 1; i < N; i++) {
@@ -77,7 +73,7 @@ class LinearEqOp : public OpKernel {
     context->set_output(0, *output_tensor);
   }
 };
-//REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
-REGISTER_KERNEL_BUILDER(Name("LinearEq"), LinearEqOp);
+REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
+
 
 
