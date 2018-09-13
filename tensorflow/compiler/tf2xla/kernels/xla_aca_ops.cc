@@ -14,14 +14,6 @@
 namespace tensorflow {
 namespace {
 
-REGISTER_OP("LinearEq")
-  .Input("b: int32")
-  .Input("x : int32")
-  .Input("m : int32")
-  .Output("y: int32")
-  .SetIsStateful()
-  .SetShapeFn(shape_inference::UnknownShape);
-
 class LinearEqOp : public XlaOpKernel {
  public:
   explicit LinearEqOp(OpKernelConstruction* ctx) : XlaOpKernel(ctx) {}
