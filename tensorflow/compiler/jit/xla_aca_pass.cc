@@ -135,9 +135,10 @@ namespace tensorflow {
       //Bisogna aggiungere il secondo input del nodo principale
       graph_out->AddEdge(edges[1]->src(), edges[1]->dst_input(), new_node, 2);
 
+      //try not to remove nodes
       //remove node and edge after setted up the new node    
-      graph_out->RemoveEdge(edges[0]);    //remove MatMul node
-      graph_out->RemoveNode(add_node);    //remove Add node
+     //graph_out->RemoveEdge(edges[0]);    //remove MatMul node
+      //graph_out->RemoveNode(add_node);    //remove Add node
     }
 
 
