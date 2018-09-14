@@ -46,18 +46,21 @@ namespace tensorflow {
     
     // Loop through our graph nodes !.
     for (Node* n : graph_out->op_nodes()) {
-      VLOG(1) << "ACA_Project : -------------------------Node Analysis---------------------------";
-      VLOG(1) << "ACA_Project : node op is : " << n->type_string();
-      //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
-      VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
+      // VLOG(1) << "ACA_Project : -------------------------Node Analysis---------------------------";
+      // VLOG(1) << "ACA_Project : node op is : " << n->type_string();
+      // //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
+      // VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
       
       //Find an Add Operation
       if(n->name() == "Add"){
-        VLOG(1) << "ACA_Project : -------------------------Node Input Edges Analysis---------------------------";
-
+        VLOG(1) << "ACA_Project : Found possibile optimization candidate ";
+        VLOG(1) << "ACA_Project : -------------------------Node Analysis---------------------------";
+        VLOG(1) << "ACA_Project : node op is : " << n->type_string();
+        VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
+        //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
+        VLOG(1) << "ACA_Project : Node Input Edges : ";
         int i=0;
         add_node = n; //store the add node
-
         // Loop through the output edges
         for (const Node* node : add_node->out_nodes()) {
           VLOG(1) << "    +ACA_Project : output node/edge op is : " << node->type_string(); 
@@ -66,9 +69,9 @@ namespace tensorflow {
         for (const Edge* edge : n->in_edges()) {
           VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
           edges[i++] = edge; //store all the edges of the Add operation
-
+    
           if(edge->src()->type_string() == "MatMul"){
-              VLOG(1) << "      ACA_Project : -------------------------Node Input Edge of an Edge Analysis---------------------------";
+              VLOG(1) << "      ACA_Project : Node MatMul Analysis";
 
               found_addmulops = true;
               int j=0;
@@ -76,7 +79,6 @@ namespace tensorflow {
               for (const Edge* subedge : edge->src()->in_edges()){
                 VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string();
                 subedges[j++] = subedge;
-
                 //Connect the inputs of the MatMul operation to the new operation
                 //graph_out->AddEdge(subedge->src(), subedge->dst_input(), new_node, i++);
               }
@@ -89,7 +91,7 @@ namespace tensorflow {
               //graph_out->AddEdge(subedges[0]->src(), subedges[0]->dst_input(), new_node, 0);
               //graph_out->AddEdge(subedges[1]->src(), subedges[1]->dst_input(), new_node, 1);
 
-              VLOG(1) << "      ACA_Project : -------------------------END Node Input Edge of an Edge Analysis---------------------------";
+              //VLOG(1) << "ACA_Project : -------------------------END Node Analysis---------------------------";
           }
           else{
               //Bisogna aggiungere il secondo input del nodo principale
@@ -102,15 +104,16 @@ namespace tensorflow {
         //graph_out->RemoveNode(n);               
         //graph_out->RemoveEdge(edges[0]);
 
-        VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";
+        //VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";
       }
       VLOG(1) << "ACA_Project : ------------------------End Node Analysis--------------------------";
     }
-    VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
+    //VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
 
 
     if(found_addmulops){
       //New node creation
+      VLOG(1) << "ACA_Project : Starting node substition"
       Status status;
       NodeDef node_def;// = add_node->def();
       node_def.set_name("_LinearEqOp_optimized_0_0");
@@ -142,24 +145,27 @@ namespace tensorflow {
 
 
     //Print again everything so that we can verify
-    VLOG(1) << "ACA_Project : ################# NEW GRAPH #################";
+    VLOG(1) << "ACA_Project : Verify Node substition";
     // Loop through our graph nodes !.
     for (Node* n : graph_out->op_nodes()) {
-      VLOG(1) << "ACA_Project : +++++++++++++Node Analysis+++++++++++++";
-      VLOG(1) << "ACA_Project : node op is : " << n->type_string();
-      VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
-      VLOG(1) << "ACA_Project : Node name : " << n->name();
+      // VLOG(1) << "ACA_Project : +++++++++++++Node Analysis+++++++++++++";
+      // VLOG(1) << "ACA_Project : node op is : " << n->type_string();
+      // VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
+      // VLOG(1) << "ACA_Project : Node name : " << n->name();
  
       //Find an Add Operation
       if(n->name() == "Add"){
-        VLOG(1) << "ACA_Project : +++++++++++++Node Input Edges Analysis+++++++++++++";
-
+        VLOG(1) << "ACA_Project : Found possibile optimization candidate again";
+        VLOG(1) << "ACA_Project : node op is : " << n->type_string();
+        VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
+        VLOG(1) << "ACA_Project : Node name : " << n->name();
+      
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
           VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
 
           if(edge->src()->type_string() == "MatMul"){
-              VLOG(1) << "      ACA_Project : +++++++++++++Node Input Edge of an Edge Analysis+++++++++++++";
+              VLOG(1) << "      Found MatMul again";
               // Loop through the input edges of the edges
               for (const Edge* subedge : edge->src()->in_edges()){
                 VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string();
@@ -171,7 +177,7 @@ namespace tensorflow {
       }
       //Find an LinearEq Operation
       else if(n->type_string() == "LinearEq"){
-        VLOG(1) << "ACA_Project : +++++++++++++Node Input Edges Analysis+++++++++++++";
+        VLOG(1) << "ACA_Project : +++++++++++++Substited Node Analysis+++++++++++++";
 
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
@@ -184,9 +190,9 @@ namespace tensorflow {
         VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
       }
 
-      VLOG(1) << "ACA_Project : +++++++++++++End Node Analysis+++++++++++++";
+      VLOG(1) << "ACA_Project : +++++++++++++End Substited Node Analysis+++++++++++++";
     }
-    VLOG(1) << "ACA_Project : ++++++++++++++++END++++++++++++++++++++++++++";
+   // VLOG(1) << "ACA_Project : ++++++++++++++++END++++++++++++++++++++++++++";
 
 
       //update the graph
