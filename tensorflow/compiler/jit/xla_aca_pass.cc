@@ -107,7 +107,7 @@ namespace tensorflow {
       }
       for (const Edge* top_edge :top_node->in_edges()){
         if (top_edge->src()->type_string() == "Add"){
-          top_node_index = top_edge->dest_input();
+          top_node_index = top_edge->dst_input();
         }
       }
       graph_out->AddEdge(new_node, 0, top_node, top_node_index);
