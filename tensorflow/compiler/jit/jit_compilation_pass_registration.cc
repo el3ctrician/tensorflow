@@ -21,7 +21,10 @@ limitations under the License.
 
 namespace tensorflow {
 // ACA Optimizzation Pass
-REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 10,
+//maybe error here to register the operation after     POST_REWRITE_FOR_EXEC,  // after re-write using feed/fetch endpoints.
+//maybe correct to run our optimization     PRE_PLACEMENT,          // after cost model assignment, before placement.
+
+REGISTER_OPTIMIZATION(OptimizationPassRegistry::PRE_PLACEMENT, 10,
                       XlaACAPass);
 
 REGISTER_OPTIMIZATION(OptimizationPassRegistry::POST_REWRITE_FOR_EXEC, 20,
