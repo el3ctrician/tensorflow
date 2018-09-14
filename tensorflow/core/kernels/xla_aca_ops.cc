@@ -32,7 +32,7 @@
 
 using namespace tensorflow;
 
-
+//maybe no need for this
 REGISTER_OP("LinearEq")
     .Input("b: int32")
     .Input("x : int32")
