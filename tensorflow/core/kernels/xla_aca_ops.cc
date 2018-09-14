@@ -37,7 +37,7 @@ REGISTER_OP("LinearEq")
     .Input("b: T")
     .Input("x : T")
     .Input("m : T")
-    .Output("y: T")
+    .Output("y: int32")
     .Attr(
         "T: {bfloat16, half, float, double, uint8, int8, int16, int32, int64, "
         "complex64, complex128, string}")
