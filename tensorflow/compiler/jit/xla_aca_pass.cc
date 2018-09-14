@@ -106,7 +106,7 @@ namespace tensorflow {
           break;        //and leave
       }
       for (const Edge* top_edge :top_node->in_edges()){
-        if (top_edge->src()->type_string == "Add"){
+        if (top_edge->src()->type_string() == "Add"){
           top_node_index = top_edge->dest_input();
         }
       }
