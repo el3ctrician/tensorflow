@@ -120,12 +120,12 @@ namespace tensorflow {
       string tmp = new_node->type_string();
 
       //Bisogna aggiungere un edge che collega l'output del nuovo nuovo con il nodo che riceveva in ingresso Add
-      // Node* top_node;
-      // for (Node* n : add_node->out_nodes()){
-      //     top_node = n; //take the first output
-      //     break;        //and leave
-      // }
-      // graph_out->AddEdge(new_node, 0, top_node, 0);
+      Node* top_node;
+      for (Node* n : add_node->out_nodes()){
+          top_node = n; //take the first output
+          break;        //and leave
+      }
+      graph_out->AddEdge(new_node, 0, top_node, 0);
       //(Node* source, int x, Node* dest, int y) 
 
       //Modify the graph
@@ -135,10 +135,9 @@ namespace tensorflow {
       //Bisogna aggiungere il secondo input del nodo principale
       graph_out->AddEdge(edges[1]->src(), edges[1]->dst_input(), new_node, 2);
 
-      //try not to remove nodes
       //remove node and edge after setted up the new node    
-     //graph_out->RemoveEdge(edges[0]);    //remove MatMul node
-      //graph_out->RemoveNode(add_node);    //remove Add node
+      graph_out->RemoveEdge(edges[0]);    //remove MatMul node
+      graph_out->RemoveNode(add_node);    //remove Add node
     }
 
 
