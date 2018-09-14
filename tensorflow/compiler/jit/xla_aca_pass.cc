@@ -113,7 +113,7 @@ namespace tensorflow {
 
     if(found_addmulops){
       //New node creation
-      VLOG(1) << "ACA_Project : Starting node substition"
+      VLOG(1) << "ACA_Project : Starting node substition";
       Status status;
       NodeDef node_def;// = add_node->def();
       node_def.set_name("_LinearEqOp_optimized_0_0");
