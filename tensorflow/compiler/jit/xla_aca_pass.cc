@@ -104,9 +104,9 @@ namespace tensorflow {
         //graph_out->RemoveNode(n);               
         //graph_out->RemoveEdge(edges[0]);
 
-        //VLOG(1) << "ACA_Project : -------------------------END Node Input Edges Analysis---------------------------";
+        VLOG(1) << "ACA_Project : -------------------------END Node Analysis---------------------------";
       }
-      VLOG(1) << "ACA_Project : ------------------------End Node Analysis--------------------------";
+//      VLOG(1) << "ACA_Project : ------------------------End Node Analysis--------------------------";
     }
     //VLOG(1) << "ACA_Project : -----------------------------END---------------------------------";
 
@@ -124,9 +124,15 @@ namespace tensorflow {
 
       //Bisogna aggiungere un edge che collega l'output del nuovo nuovo con il nodo che riceveva in ingresso Add
       Node* top_node;
+      bool top_node_assigned  = false;
       for (Node* n : add_node->out_nodes()){
-          top_node = n; //take the first output
-          break;        //and leave
+          VLOG(1) << "ACA_Project : out_node of add :  " << n->type_string(); ;
+          if (! top_node_assigned ){
+            top_node = n; //take the first output
+            top_node_assigned = true;
+          }
+          
+          //break;        //and leave
       }
       graph_out->AddEdge(new_node, 0, top_node, 0);
       //(Node* source, int x, Node* dest, int y) 
@@ -188,9 +194,10 @@ namespace tensorflow {
           VLOG(1) << "    +ACA_Project : output node/edge op is : " << node->type_string(); 
         }
         VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
+        VLOG(1) << "ACA_Project : +++++++++++++End Substited Node Analysis+++++++++++++";
       }
 
-      VLOG(1) << "ACA_Project : +++++++++++++End Substited Node Analysis+++++++++++++";
+      // VLOG(1) << "ACA_Project : +++++++++++++End Substited Node Analysis+++++++++++++";
     }
    // VLOG(1) << "ACA_Project : ++++++++++++++++END++++++++++++++++++++++++++";
 
