@@ -60,7 +60,7 @@ class LinearEqOp : public OpKernel {
     const Tensor& input_add_tensor = context->input(2);
     auto input_mul1 = input_mul1_tensor.flat<int32>();
     auto input_mul2 = input_mul2_tensor.flat<int32>();
-    auto input_add = input_add_tensor.flat<int32>();
+    auto input_add = input_add_tensor.flat<int32>(); //remove casting
 
     // Check that the dimensions of the three matrices are valid.
     OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_mul1_tensor.shape()),
