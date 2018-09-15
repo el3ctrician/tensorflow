@@ -49,8 +49,8 @@ REGISTER_OP("LinearEq")
 class LinearEqOp : public OpKernel {
  public:
   explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {
-    OP_REQUIRES_OK(context, context->GetAttr("transpose_a", &transpose_a_));
-    OP_REQUIRES_OK(context, context->GetAttr("transpose_b", &transpose_b_));
+   // OP_REQUIRES_OK(context, context->GetAttr("transpose_a", &transpose_a_));
+   // OP_REQUIRES_OK(context, context->GetAttr("transpose_b", &transpose_b_));
   }
 
   void Compute(OpKernelContext* context) override {
