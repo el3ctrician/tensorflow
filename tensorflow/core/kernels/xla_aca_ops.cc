@@ -38,8 +38,6 @@ REGISTER_OP("LinearEq")
     .Input("b : float")
     .Input("c : float")
     .Output("y: float")
-    .Attr("transpose_a: bool = false")
-    .Attr("transpose_b: bool = false")
     .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
       c->set_output(0, c->input(0));
       return Status::OK();
