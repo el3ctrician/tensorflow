@@ -60,9 +60,9 @@ class LinearEqOp : public OpKernel {
     const Tensor& input_mul1_tensor = context->input(0);
     const Tensor& input_mul2_tensor = context->input(1);
     const Tensor& input_add_tensor = context->input(2);
-    auto input_mul1 = input_mul1_tensor.flat<int32>();
-    auto input_mul2 = input_mul2_tensor.flat<int32>();
-    auto input_add = input_add_tensor.flat<int32>(); //remove casting
+    auto input_mul1 = input_mul1_tensor.flat<float>();
+    auto input_mul2 = input_mul2_tensor.flat<float>();
+    auto input_add = input_add_tensor.flat<float>(); //remove casting
 
     // Check that the dimensions of the three matrices are valid.
     OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_mul1_tensor.shape()),
@@ -87,7 +87,7 @@ class LinearEqOp : public OpKernel {
     Tensor* out = nullptr;
 
     OP_REQUIRES_OK(context, context->allocate_output(0, out_shape, &out));
-    auto output_flat = out->flat<int32>();
+    auto output_flat = out->flat<float>();
 
 
     //Do the operation
