@@ -63,12 +63,12 @@ class LinearEqOp : public OpKernel {
     auto input_add = input_add_tensor.flat<float>(); //remove casting
 
     // Check that the dimensions of the three matrices are valid.
-    OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_mul1_tensor.shape()),
+    /*OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_mul1_tensor.shape()),
                 errors::InvalidArgument("In[0] is not a matrix"));
     OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_mul2_tensor.shape()),
                 errors::InvalidArgument("In[1] is not a matrix"));
     OP_REQUIRES(context, TensorShapeUtils::IsMatrix(input_add_tensor.shape()),
-                errors::InvalidArgument("In[2] is not a matrix"));
+                errors::InvalidArgument("In[2] is not a matrix"));*/
     Eigen::array<Eigen::IndexPair<Eigen::DenseIndex>, 1> dim_pair;
     dim_pair[0].first = transpose_a_ ? 0 : 1;
     dim_pair[0].second = transpose_b_ ? 1 : 0;
