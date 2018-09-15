@@ -115,8 +115,8 @@ namespace tensorflow {
 
       //Modify the graph
       //Connect the inputs of the MatMul operation to the new operation
-      graph_out->AddEdge(subedges[0]->src(), 0, new_node, 0);
-      graph_out->AddEdge(subedges[1]->src(), 0, new_node, 1);
+      graph_out->AddEdge(subedges[0]->src(), 0, new_node, 1);
+      graph_out->AddEdge(subedges[1]->src(), 0, new_node, 0);
       //Bisogna aggiungere il secondo input del nodo principale
       graph_out->AddEdge(edges[1]->src(), 0, new_node, 2);
 

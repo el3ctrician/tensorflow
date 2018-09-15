@@ -74,11 +74,11 @@ class LinearEqOp : public OpKernel {
     dim_pair[0].second = transpose_b_ ? 1 : 0;
 
     // Create an output tensor
-    /*OP_REQUIRES(
+    OP_REQUIRES(
         context, input_mul1_tensor.dim_size(dim_pair[0].first) == input_mul2_tensor.dim_size(dim_pair[0].second),
         errors::InvalidArgument(
             "Matrix size-incompatible: In[0]: ", input_mul1_tensor.shape().DebugString(),
-            ", In[1]: ", input_mul2_tensor.shape().DebugString()));*/
+            ", In[1]: ", input_mul2_tensor.shape().DebugString()));
     int a_dim_remaining = 1 - dim_pair[0].first;
     int b_dim_remaining = 1 - dim_pair[0].second;
     TensorShape out_shape({input_mul1_tensor.dim_size(a_dim_remaining), input_mul2_tensor.dim_size(b_dim_remaining)});
