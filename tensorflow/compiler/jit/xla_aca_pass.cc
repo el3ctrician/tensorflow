@@ -57,18 +57,18 @@ namespace tensorflow {
         VLOG(1) << "ACA_Project : -------------------------Node Analysis---------------------------";
         VLOG(1) << "ACA_Project : node op is : " << n->type_string();
         VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
-        VLOG(1) << "ACA_Project : node shape :" << n->shape().DebugString();
+        VLOG(1) << "ACA_Project : node shape :";// << n->shape().DebugString();
         //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
         VLOG(1) << "ACA_Project : Node Input Edges : ";
         int i=0;
         add_node = n; //store the add node
         // Loop through the output edges
         for (const Node* node : add_node->out_nodes()) {
-          VLOG(1) << "    +ACA_Project : output node/edge op is : " << node->type_string() << " - shape: " << node->shape().DebugString(); 
+          VLOG(1) << "    +ACA_Project : output node/edge op is : " << node->type_string();// << " - shape: " << node->shape().DebugString(); 
         }
         // Loop through the input edges
         for (const Edge* edge : n->in_edges()) {
-          VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string() << " - shape: " << edge->src()->shape().DebugString();
+          VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();// << " - shape: " << edge->src()->shape().DebugString();
           edges[i++] = edge; //store all the edges of the Add operation
     
           if(edge->src()->type_string() == "MatMul"){
@@ -77,7 +77,7 @@ namespace tensorflow {
               int j=0;
               // Loop through the input edges of the edges
               for (const Edge* subedge : edge->src()->in_edges()){
-                VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string() << " - shape: " << subedge->src()->shape().DebugString();
+                VLOG(1) << "          ACA_Project : input node/edge op is : " << subedge->src()->type_string();// << " - shape: " << subedge->src()->shape().DebugString();
                 subedges[j++] = subedge;
               }
           }              
