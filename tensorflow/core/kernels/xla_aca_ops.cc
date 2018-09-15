@@ -34,10 +34,13 @@ using namespace tensorflow;
 
 //maybe no need for this
 REGISTER_OP("LinearEq")
-    .Input("b: float")
-    .Input("x : float")
-    .Input("m : float")
-    .Output("y: float")
+    .Input("a: T")
+    .Input("b : T")
+    .Input("c : T")
+    .Output("y: T")
+    .Attr("transpose_a: bool = false")
+    .Attr("transpose_b: bool = false")
+    .Attr("T: {bfloat16, half, float, double, int32, complex64, complex128}")
     .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
       c->set_output(0, c->input(0));
       return Status::OK();
