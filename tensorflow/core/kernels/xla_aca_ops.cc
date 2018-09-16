@@ -118,6 +118,7 @@ class LinearEqOp : public OpKernel {
   bool transpose_b_;
 };
 
+template <typename T>
 #define REGISTER_CPU_EIGEN(T)
 REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp<DEVICE_CPU, T, false /* cublas, ignored for CPU */>);
 
