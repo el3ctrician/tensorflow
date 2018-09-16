@@ -29,6 +29,7 @@
 #include "tensorflow/core/framework/shape_inference.h"
 #include "tensorflow/core/framework/op_kernel.h"
 #include "tensorflow/core/kernels/fill_functor.h"
+#include "tensorflow/core/framework/register_types.h"
 
 
 using namespace tensorflow;
@@ -118,8 +119,6 @@ class LinearEqOp : public OpKernel {
   bool transpose_b_;
 };
 
-template <typename T>
-#define REGISTER_CPU_EIGEN(T)
 REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp<DEVICE_CPU, T, false /* cublas, ignored for CPU */>);
 
 
