@@ -28,7 +28,6 @@
 #include "tensorflow/core/framework/op.h"
 #include "tensorflow/core/framework/shape_inference.h"
 #include "tensorflow/core/framework/op_kernel.h"
-#include "tensorflow/core/kernels/fill_functor.h"
 
 
 using namespace tensorflow;
@@ -44,7 +43,7 @@ REGISTER_OP("LinearEq")
       return Status::OK();
     });
 
-//template <typename Device, typename T, bool USE_CUBLAS>
+
 class LinearEqOp : public OpKernel {
  public:
   explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {
@@ -85,23 +84,9 @@ class LinearEqOp : public OpKernel {
     TensorShape out_shape({input_mul1_tensor.dim_size(a_dim_remaining), input_mul2_tensor.dim_size(b_dim_remaining)});
     Tensor* out = nullptr;
 
-    /*if (out->NumElements() == 0) {
-      // If a has shape [0, x] or b has shape [x, 0], the output shape
-      // is a 0-element matrix, so there is nothing to do.
-      return;
-    }
-
-    if (input_mul1_tensor.NumElements() == 0 || input_mul2_tensor.NumElements() == 0) {
-      // If a has shape [x, 0] and b has shape [0, y], the
-      // output shape is [x, y] where x and y are non-zero, so we fill
-      // the output with zeros.
-      functor::SetZeroFunctor<Device, T> f;
-      f(context->eigen_device<Device>(), out->flat<T>());
-      return;
-    }*/
-
     OP_REQUIRES_OK(context, context->allocate_output(0, out_shape, &out));
     auto output_flat = out->flat<float>();
+
 
     //Do the operation
     const int N = input_add.size();
