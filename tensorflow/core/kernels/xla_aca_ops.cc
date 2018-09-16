@@ -117,7 +117,7 @@ class LinearEqOp : public OpKernel {
   bool transpose_a_;
   bool transpose_b_;
 };
-REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp<DEVICE_CPU, float, false /* cublas, ignored for CPU */>);
+REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp<DEVICE_CPU, T, false /* cublas, ignored for CPU */>);
 
 
 
