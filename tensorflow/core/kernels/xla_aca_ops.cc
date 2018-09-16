@@ -38,7 +38,7 @@
 
 using namespace tensorflow;
 
-typedef Eigen::ThreadPoolDevice CPUDevice;
+
 
 //maybe no need for this
 REGISTER_OP("LinearEq")
