@@ -44,7 +44,6 @@ REGISTER_OP("LinearEq")
       return Status::OK();
     });
 
-template <typename Device, typename T, bool USE_CUBLAS>
 class LinearEqOp : public OpKernel {
  public:
   explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {
@@ -96,7 +95,7 @@ class LinearEqOp : public OpKernel {
       // output shape is [x, y] where x and y are non-zero, so we fill
       // the output with zeros.
       SetZeroFunctor f;
-      f(context->eigen_device<Device>(), out->flat<T>());
+      f(context->eigen_device<Device>(), out->flat<float>());
       return;
     }
 
