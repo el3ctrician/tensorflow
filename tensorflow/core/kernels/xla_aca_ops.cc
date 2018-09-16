@@ -50,7 +50,7 @@ REGISTER_OP("LinearEq")
       return Status::OK();
     });
 
-template <typename Device, typename T, bool USE_CUBLAS>
+//template <typename Device, typename T, bool USE_CUBLAS>
 class LinearEqOp : public OpKernel {
  public:
   explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {
@@ -91,7 +91,7 @@ class LinearEqOp : public OpKernel {
     TensorShape out_shape({input_mul1_tensor.dim_size(a_dim_remaining), input_mul2_tensor.dim_size(b_dim_remaining)});
     Tensor* out = nullptr;
 
-    if (out->NumElements() == 0) {
+    /*if (out->NumElements() == 0) {
       // If a has shape [0, x] or b has shape [x, 0], the output shape
       // is a 0-element matrix, so there is nothing to do.
       return;
@@ -104,7 +104,7 @@ class LinearEqOp : public OpKernel {
       functor::SetZeroFunctor<Device, T> f;
       f(context->eigen_device<Device>(), out->flat<T>());
       return;
-    }
+    }*/
 
     OP_REQUIRES_OK(context, context->allocate_output(0, out_shape, &out));
     auto output_flat = out->flat<float>();
