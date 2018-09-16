@@ -24,11 +24,11 @@
 )
 **/
 
+
 #include "tensorflow/core/framework/op.h"
 #include "tensorflow/core/framework/shape_inference.h"
 #include "tensorflow/core/framework/op_kernel.h"
 #include "tensorflow/core/kernels/fill_functor.h"
-#include "tensorflow/core/framework/register_types.h"
 
 
 using namespace tensorflow;
@@ -44,7 +44,7 @@ REGISTER_OP("LinearEq")
       return Status::OK();
     });
 
-//template <typename Device, typename T, bool USE_CUBLAS>
+template <typename Device, typename T, bool USE_CUBLAS>
 class LinearEqOp : public OpKernel {
  public:
   explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {
@@ -117,7 +117,6 @@ class LinearEqOp : public OpKernel {
   bool transpose_a_;
   bool transpose_b_;
 };
-
 REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp);
 
 
