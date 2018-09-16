@@ -43,6 +43,8 @@ namespace tensorflow {
     const Edge* subedges[10]; //store all subedges of the edges of the Add operation
     Node* add_node;     //store the add node
     bool found_addmulops = false;
+    bool compile_with_xla = false;
+    bool compile = false;
     
     // Loop through our graph nodes !.
     for (Node* n : graph_out->op_nodes()) {
@@ -55,15 +57,17 @@ namespace tensorflow {
       if(n->name() == "Add"){
         VLOG(1) << "ACA_Project : Found possibile optimization candidate ";
         VLOG(1) << "ACA_Project : -------------------------Node Analysis---------------------------";
+        
+        Status status = GetNodeAttr(n->attrs(), kXlaCompileAttr, &compile);
+        if (status.ok() && compile) {
+          VLOG(1) << "ACA_Project : compile with XLA";
+          compile_with_xla = true;
+        }
+
         VLOG(1) << "ACA_Project : node op is : " << n->type_string();
         VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
         //VLOG(1) << "ACA_Project : node shape :";// << n->shape().DebugString();
         //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
-        bool compile = false;
-        Status status = GetNodeAttr(n->attrs(), kXlaCompileAttr, &compile);
-        if (status.ok() && compile) {
-          VLOG(1) << "ACA_Project : compile with XLA";
-        }
 
         VLOG(1) << "ACA_Project : Node Input Edges : ";
         int i=0;
@@ -94,7 +98,7 @@ namespace tensorflow {
 
 
     //Optimization
-    if(found_addmulops){
+    if(found_addmulops && compile_with_xla){
       //New node creation
       VLOG(1) << "ACA_Project : Starting node substition";
       Status status;
@@ -132,35 +136,35 @@ namespace tensorflow {
       graph_out->RemoveNode(add_node);    //remove Add node
     }
 
+    if(compile_with_xla){
+      //Print again everything so that we can verify
+      VLOG(1) << "ACA_Project : Verify Node substition";
+      // Loop through our graph nodes !.
+      for (Node* n : graph_out->op_nodes()) {
+        // VLOG(1) << "ACA_Project : +++++++++++++Node Analysis+++++++++++++";
+        // VLOG(1) << "ACA_Project : node op is : " << n->type_string();
+        // VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
+        // VLOG(1) << "ACA_Project : Node name : " << n->name();
+  
+        //Find an LinearEq Operation
+        if(n->type_string() == "LinearEq"){
+          VLOG(1) << "ACA_Project : +++++++++++++Substited Node Analysis+++++++++++++";
 
-    //Print again everything so that we can verify
-    VLOG(1) << "ACA_Project : Verify Node substition";
-    // Loop through our graph nodes !.
-    for (Node* n : graph_out->op_nodes()) {
-      // VLOG(1) << "ACA_Project : +++++++++++++Node Analysis+++++++++++++";
-      // VLOG(1) << "ACA_Project : node op is : " << n->type_string();
-      // VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
-      // VLOG(1) << "ACA_Project : Node name : " << n->name();
- 
-      //Find an LinearEq Operation
-      if(n->type_string() == "LinearEq"){
-        VLOG(1) << "ACA_Project : +++++++++++++Substited Node Analysis+++++++++++++";
+          // Loop through the input edges
+          for (const Edge* edge : n->in_edges()) {
+            VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
+          }
+          // Loop through the output edges
+          for (const Node* node : n->out_nodes()) {
+            VLOG(1) << "    +ACA_Project : output node/edge op is : " << node->type_string(); 
+          }
+          VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
+        }
 
-        // Loop through the input edges
-        for (const Edge* edge : n->in_edges()) {
-          VLOG(1) << "    ACA_Project : input node/edge op is : " << edge->src()->type_string();
-        }
-        // Loop through the output edges
-        for (const Node* node : n->out_nodes()) {
-          VLOG(1) << "    +ACA_Project : output node/edge op is : " << node->type_string(); 
-        }
-        VLOG(1) << "ACA_Project : +++++++++++++END Node Input Edges Analysis+++++++++++++";
+        // VLOG(1) << "ACA_Project : +++++++++++++End Substited Node Analysis+++++++++++++";
       }
-
-      // VLOG(1) << "ACA_Project : +++++++++++++End Substited Node Analysis+++++++++++++";
+      // VLOG(1) << "ACA_Project : ++++++++++++++++END++++++++++++++++++++++++++";
     }
-   // VLOG(1) << "ACA_Project : ++++++++++++++++END++++++++++++++++++++++++++";
-
 
       //update the graph
       //*options.graph = std::move(graph_out);
