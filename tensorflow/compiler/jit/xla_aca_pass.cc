@@ -60,9 +60,11 @@ namespace tensorflow {
         
         Status status = GetNodeAttr(n->attrs(), kXlaCompileAttr, &compile);
         if (status.ok() && compile) {
-          VLOG(1) << "ACA_Project : compile with XLA";
+          VLOG(1) << "ACA_Project : compile with XLA --> Optimize";
           compile_with_xla = true;
         }
+        else  
+          VLOG(1) << "ACA_Project : No XLA, SKIP THIS OPTIMIZATION PASS!!";
 
         VLOG(1) << "ACA_Project : node op is : " << n->type_string();
         VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
