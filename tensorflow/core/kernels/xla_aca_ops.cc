@@ -43,7 +43,7 @@ REGISTER_OP("LinearEq")
       return Status::OK();
     });
 
-
+template <typename Device, typename T, bool USE_CUBLAS>
 class LinearEqOp : public OpKernel {
  public:
   explicit LinearEqOp(OpKernelConstruction* context) : OpKernel(context) {
