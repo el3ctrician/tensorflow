@@ -94,7 +94,7 @@ class LinearEqOp : public OpKernel {
       // If a has shape [x, 0] and b has shape [0, y], the
       // output shape is [x, y] where x and y are non-zero, so we fill
       // the output with zeros.
-      SetZeroFunctor f;
+      functor::SetZeroFunctor f;
       f(context->eigen_device<Device>(), out->flat<float>());
       return;
     }
