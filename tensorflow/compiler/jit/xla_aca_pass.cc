@@ -57,8 +57,14 @@ namespace tensorflow {
         VLOG(1) << "ACA_Project : -------------------------Node Analysis---------------------------";
         VLOG(1) << "ACA_Project : node op is : " << n->type_string();
         VLOG(1) << "ACA_Project : node num_inputs :" << n->num_inputs();
-        VLOG(1) << "ACA_Project : node shape :";// << n->shape().DebugString();
+        //VLOG(1) << "ACA_Project : node shape :";// << n->shape().DebugString();
         //VLOG(1) << "ACA_Project : node summary :" << SummarizeNode(*n);
+        bool compile = false;
+        Status status = GetNodeAttr(n->attrs(), kXlaCompileAttr, &compile);
+        if (status.ok() && compile) {
+          VLOG(1) << "ACA_Project : compile with XLA
+        }
+
         VLOG(1) << "ACA_Project : Node Input Edges : ";
         int i=0;
         add_node = n; //store the add node
@@ -87,7 +93,7 @@ namespace tensorflow {
     } //end graph loop
 
 
-
+    //Optimization
     if(found_addmulops){
       //New node creation
       VLOG(1) << "ACA_Project : Starting node substition";
