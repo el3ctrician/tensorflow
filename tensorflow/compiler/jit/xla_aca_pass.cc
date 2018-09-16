@@ -62,7 +62,7 @@ namespace tensorflow {
         bool compile = false;
         Status status = GetNodeAttr(n->attrs(), kXlaCompileAttr, &compile);
         if (status.ok() && compile) {
-          VLOG(1) << "ACA_Project : compile with XLA
+          VLOG(1) << "ACA_Project : compile with XLA";
         }
 
         VLOG(1) << "ACA_Project : Node Input Edges : ";
