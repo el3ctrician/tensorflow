@@ -125,8 +125,7 @@ class LinearEqOp : public OpKernel {
   bool transpose_b_;
 };
 
-typedef Eigen::ThreadPoolDevice CPUDevice;
-REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp<CPUDevice, float, false>);
+REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp<Name("LinearEq").Device, float, false>);
 
 
 
