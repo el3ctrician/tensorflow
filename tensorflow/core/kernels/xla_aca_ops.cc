@@ -34,6 +34,8 @@
 
 using namespace tensorflow;
 
+typedef Eigen::ThreadPoolDevice CPUDevice;
+
 //maybe no need for this
 REGISTER_OP("LinearEq")
     .Input("a: float")
@@ -119,7 +121,7 @@ class LinearEqOp : public OpKernel {
   bool transpose_b_;
 };
 
-REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp<DEVICE_CPU, float, false>);
+REGISTER_KERNEL_BUILDER(Name("LinearEq").Device(DEVICE_CPU), LinearEqOp<CPUDevice, float, false>);
 
 
 
